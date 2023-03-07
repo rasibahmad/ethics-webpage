@@ -2,22 +2,9 @@ import { Textarea, Box, Button, Group, SimpleGrid, Table} from '@mantine/core';
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../client';
 import ApplicationTable from '../components/ApplicationTable';
-import { useSession, useUser } from '@supabase/auth-helpers-react';
-import { useRouter } from "next/router";
-
+import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 
 export default function Application() {
-    const session = useSession();
-    const router = useRouter();
-    const user = useUser()
-    console.log(user);
-
-    useEffect(() => {
-        if(!session){
-          router.push('/login')
-        }
-      },[session])
-
     const [applicationTitle, setApplicationTitle] = useState('')
     const [applicationError, setApplicationError] = useState(null)
 
@@ -159,4 +146,28 @@ export default function Application() {
         </SimpleGrid>
     )
 
+}
+// Protected page - checks the session on the server
+export const getServerSideProps = async (ctx) => {
+    // create authenticated supabase client
+    const supabase = createServerSupabaseClient(ctx)
+    // checks if there is a session
+    const {
+        data: { session },   
+    } = await supabase.auth.getSession()
+
+    if (!session) 
+        return{
+            redirect: {
+                destination: '/login',
+                permanent: false,
+            },
+        }
+
+    return {
+        props: {
+            initialSession: session,
+            user: session.user,
+        },
+    }
 }

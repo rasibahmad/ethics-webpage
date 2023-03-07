@@ -117,23 +117,18 @@ const completeApp = () => {
       <h4>Application ID: {id}</h4>
       <form onSubmit={applicationForm}>
         <TextInput
-          placeholder=""
           label="Student Name"
-          //description="Enter name of application to create."
           radius="md"
           withAsterisk
           onChange={(e) => setStudentName(e.target.value)}
         />
         <TextInput
-          placeholder=""
           label="Student Email"
-          //description="Enter name of application to create."
           radius="md"
           withAsterisk
           onChange={(e) => setStudentEmail(e.target.value)}
         />
         <TextInput
-          placeholder=""
           label="Student Number"
           description="Enter 9-digit Student number"
           radius="md"
@@ -166,7 +161,6 @@ const completeApp = () => {
           onChange={(e) => setProjectObjectives(e.target.value)}
         />
         <Textarea
-          placeholder=""
           label="Study Objectives"
           description="Please explain how the study you are seeking ethical approval to conduct contributes to your overall project objectives"
           radius="md"
@@ -176,7 +170,6 @@ const completeApp = () => {
           onChange={(e) => setStudyObjectives(e.target.value)}
         />
         <Textarea
-          placeholder=""
           label="Data Collection Method(s) to be Used"
           description="Please outline your proposed data collection methods – e.g., questionnaire/survey, interview, observational study, etc. Justify their use and explain how you will conduct the data collection in practice, including timeframe"
           radius="md"
@@ -186,7 +179,6 @@ const completeApp = () => {
           onChange={(e) => setDataCollectionMethod(e.target.value)}
         />
         <Textarea
-          placeholder=""
           label="Data to be Collected"
           description="Please briefly outline the type of data to be collected"
           radius="md"
@@ -196,7 +188,6 @@ const completeApp = () => {
           onChange={(e) => setDataCollected(e.target.value)}
         />
         <Textarea
-          placeholder=""
           label="Participant Recruitment"
           description="Please outline how you will recruit participants to your study"
           radius="md"
@@ -206,7 +197,6 @@ const completeApp = () => {
           onChange={(e) => setParticipantRecruitment(e.target.value)}
         />
         <Textarea
-          placeholder=""
           label="Data Storage"
           description="Please outline where you will store your data (ideally, on an encrypted server; USB drives are not permissible)"
           radius="md"
@@ -216,7 +206,6 @@ const completeApp = () => {
           onChange={(e) => setDataStorage(e.target.value)}
         />
         <Textarea
-          placeholder=""
           label="For Secondary Data/Dataset Use Only: Compliance with Terms & Conditions of Use"
           description="If you will be in receipt of secondary data OR will be using an online, publicly available dataset, please provide evidence that you are observing any terms and conditions associated with its use and have permission to use it. Be mindful that just because data is available online does not mean that you are ethically entitled to use it for your study; this needs proven. If you are being given data by, for example, a third party, you need to be sure that the individual has permission to share the data with you."
           radius="md"
@@ -226,7 +215,6 @@ const completeApp = () => {
           onChange={(e) => setDataEvidence(e.target.value)}
         />
         <Textarea
-          placeholder=""
           label="Risk"
           description="Please outline any risks to either the participants in your study and/or yourself in the conduct of the study and what you have done to mitigate that risk"
           radius="md"

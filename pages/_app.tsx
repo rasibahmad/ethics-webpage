@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 import Navbar from '../components/NavbarComponent'
 import { supabase } from '../client'
+import {SSRProvider} from '@react-aria/ssr';
 
 export default function MyApp({
   Component,

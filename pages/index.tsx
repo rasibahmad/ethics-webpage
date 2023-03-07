@@ -7,7 +7,6 @@ export default function Home() {
   const user = useUser();
   const session = useSession();
   const router = useRouter();
-  console.log(session)
 
   useEffect(() => {
     if(!session){
