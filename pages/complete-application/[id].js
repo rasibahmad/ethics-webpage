@@ -32,18 +32,20 @@ const completeApp = () => {
   const [isControversialChecked, setIsControversialChecked] = useState(false)
   const [isDataRiskChecked, setIsDataRiskChecked] = useState(false)
   const [student_signature, setStudentSignature] = useState('')
+  const [supervisor_name, setSupervisorName] = useState('')
+  const [supervisor_email, setSupervisorEmail] = useState('')
 
   const applicationForm = async (e) => {
     e.preventDefault()
 
-    if (!student_email || !student_name || !student_number || !project_objectives || !study_objectives || !data_collection_method || !data_collected || !participant_recruitment || !data_storage || !data_evidence || !risk || !student_signature) {
+    if (!student_email || !student_name || !student_number || !supervisor_name || !supervisor_email || !project_objectives || !study_objectives || !data_collection_method || !data_collected || !participant_recruitment || !data_storage || !data_evidence || !risk || !student_signature) {
       setApplicationError('Please complete the application form')
       return
     }
 
     const { data, error } = await supabase
       .from('applications')
-      .update({ student_email, student_number, student_name, other_risk, project_objectives, study_objectives, data_collection_method, data_collected, participant_recruitment, data_storage, data_evidence, risk, comments, status: "Supervisor Review", student_signature })
+      .update({ student_email, student_number, student_name, supervisor_name, supervisor_email, other_risk, project_objectives, study_objectives, data_collection_method, data_collected, participant_recruitment, data_storage, data_evidence, risk, comments, status: "Supervisor Review", student_signature })
       .eq('id', id)
       .select()
 
@@ -134,6 +136,18 @@ const completeApp = () => {
           radius="md"
           withAsterisk
           onChange={(e) => setStudentNumber(e.target.value)}
+        />
+        <TextInput
+          label="Supervisor Full Name"
+          radius="md"
+          withAsterisk
+          onChange={(e) => setSupervisorName(e.target.value)}
+        />
+        <TextInput
+          label="Supervisor Email"
+          radius="md"
+          withAsterisk
+          onChange={(e) => setSupervisorEmail(e.target.value)}
         />
         <h2>Section 0: Ethics Declaration Questions</h2>
         <h3>Please tick the following boxes if your project will involve any of the following:</h3>

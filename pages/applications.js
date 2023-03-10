@@ -3,11 +3,14 @@ import React, { useEffect, useState } from 'react';
 import { supabase } from '../client';
 import ApplicationTable from '../components/ApplicationTable';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import { useUser } from '@supabase/auth-helpers-react';
 
 export default function Application() {
     const [applicationTitle, setApplicationTitle] = useState('')
     const [applicationError, setApplicationError] = useState(null)
+    const user = useUser();
 
+    // create application function
     const createApplication = async (e) => {
         e.preventDefault()
 
@@ -19,6 +22,7 @@ export default function Application() {
         const { data, error } = await supabase
             .from('applications')
             .insert([{ applicationTitle }])
+            .select()
 
         if (error) {
             console.log(error)
@@ -26,14 +30,18 @@ export default function Application() {
         }
 
         if (data) {
-            console.log(data)
             setApplicationError(null)
+            const { error } = await supabase
+            .from('applications')
+            .update({user_id: user.id})
+            .eq('id', data[0].id)
         }
     }
 
     const [question, setQuestion] = useState('')
     const [questionError, setQuestionError] = useState(null)
 
+    // create question function
     const createQuestion = async (e) => {
         e.preventDefault()
 
@@ -45,6 +53,7 @@ export default function Application() {
         const { data, error } = await supabase
             .from('questions')
             .insert([{ question }])
+            .select()
 
         if (error) {
             console.log(error)
@@ -52,19 +61,24 @@ export default function Application() {
         }
 
         if (data) {
-            console.log(data)
             setQuestionError(null)
+            const { error } = await supabase
+            .from('questions')
+            .update({user_id: user.id})
+            .eq('id', data[0].id)
         }
     }
 
     const [fetchError, setFetchError] = useState(null)
     const [applicationsList, setApplicationsList] = useState([])
 
+    // only fetch applications made by logged in user in the table
     useEffect(() => {
         const fetchApplications = async () => {
             const { data, error } = await supabase
                 .from('applications')
                 .select()
+                .eq('user_id', user.id)
 
             if (error) {
                 setFetchError('No Applications Found')
@@ -76,8 +90,7 @@ export default function Application() {
                 setApplicationsList(data)
                 setFetchError(null)
             }
-        }
-        
+        }      
         fetchApplications()
     }, [])
 
@@ -147,6 +160,7 @@ export default function Application() {
     )
 
 }
+
 // Protected page - checks the session on the server
 export const getServerSideProps = async (ctx) => {
     // create authenticated supabase client

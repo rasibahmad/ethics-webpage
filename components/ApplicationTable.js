@@ -11,7 +11,7 @@ const ApplicationTable = ({application, setApplicationId }) => {
             <td>{id}</td>
             <td>{created_at}</td>
             <td>{updated_at}</td>
-            <td>{status}</td>
+            <td>{status}</td>           
         </tr>
     )
 }
