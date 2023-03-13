@@ -7,6 +7,7 @@ const viewApp = () => {
     const router = useRouter()
     const { id } = router.query
     const [applicationTitle, setApplicationTitle] = useState('')
+    const [applicationError, setApplicationError] = useState(null)
     const [student_name, setStudentName] = useState('')
     const [student_number, setStudentNumber] = useState('')
     const [student_email, setStudentEmail] = useState('')
@@ -19,6 +20,55 @@ const viewApp = () => {
     const [data_evidence, setDataEvidence] = useState('')
     const [risk, setRisk] = useState('')
     const [comments, setComments] = useState('')
+    const [supervisor_name, setSupervisorName] = useState('')
+    const [supervisor_email, setSupervisorEmail] = useState('')
+    const [checked, setChecked] = useState(false)
+    const [human_participants, setHumanParticipants] = useState(false)
+    const [isHumanParticipantsChecked, setIsHumanParticipantsChecked] = useState(false)
+    const [testing_apparatus, setTestingApparatus] = useState(false)
+    const [isTestingApparatusChecked, setIsTestingApparatusChecked] = useState(false)
+    const [lone_working, setLoneWorking] = useState(false)
+    const [isLoneWorkingChecked, setIsLoneWorkingChecked] = useState(false)
+    const [travel_risk, setTravelRisk] = useState(false)
+    const [isTravelRiskChecked, setIsTravelRiskChecked] = useState(false)
+    const [emotional_risk, setEmotionalRisk] = useState(false)
+    const [isEmotionalRiskChecked, setIsEmotionalRiskChecked] = useState(false)
+    const [other_risk, setOtherRisk] = useState('')
+    const [environment_risk, setEnvironmentRisk] = useState(false)
+    const [isEnvironmentRiskChecked, setIsEnvironmentRiskChecked] = useState(false)
+    const [conflict_interest, setConflictInterest] = useState(false)
+    const [isConflictInterestChecked, setIsConflictInterestChecked] = useState(false)
+    const [controversial_work, setControverisalWork] = useState(false)
+    const [isControversialChecked, setIsControversialChecked] = useState(false)
+    const [data_risk, setDataRisk] = useState(false)
+    const [isDataRiskChecked, setIsDataRiskChecked] = useState(false)
+    const [student_signature, setStudentSignature] = useState('')
+    const [supervisor_signature, setSupervisorSignature] = useState('')
+    // const [document, setDocuments] = useState('')
+
+    const applicationForm = async (e) => {
+        e.preventDefault()
+
+        if (!student_email || !student_name || !student_number || !supervisor_name || !supervisor_email || !project_objectives || !study_objectives || !data_collection_method || !data_collected || !participant_recruitment || !data_storage || !data_evidence || !risk || !student_signature) {
+            setApplicationError('Please complete the application form')
+            return
+        }
+
+        const { data, error } = await supabase
+            .from('applications')
+            .update({ student_email, student_number, student_name, supervisor_name, supervisor_email, other_risk, project_objectives, study_objectives, data_collection_method, data_collected, participant_recruitment, data_storage, data_evidence, risk, comments, status: "Supervisor Approved", student_signature, supervisor_signature })
+            .eq('id', id)
+            .select()
+
+        if (error) {
+            setApplicationError('Please complete the application form')
+        }
+
+        if (data) {
+            setApplicationError(null)
+            router.push('/supervisors/applications')
+        }
+    }
 
     useEffect(() => {
         const fetchApplication = async () => {
@@ -46,16 +96,45 @@ const viewApp = () => {
                 setDataEvidence(data.data_evidence)
                 setRisk(data.risk)
                 setComments(data.comments)
+                setSupervisorName(data.supervisor_name)
+                setSupervisorEmail(data.supervisor_email)
+                setHumanParticipants(data.human_participants)
+                setTestingApparatus(data.testing_apparatus)
+                setLoneWorking(data.lone_working)
+                setTravelRisk(data.travel_risk)
+                setEmotionalRisk(data.emotional_risk)
+                setOtherRisk(data.other_risk)
+                setEnvironmentRisk(data.environment_risk)
+                setConflictInterest(data.conflict_interest)
+                setControverisalWork(data.controversial_work)
+                setDataRisk(data.data_risk)
+                setStudentSignature(data.student_signature)
             }
         }
         fetchApplication()
     }, [id])
 
+    useEffect(() => {
+        const retrieveFile = async () => {
+            const { data, error } = await supabase
+                .storage
+                .getBucket('documents')
+
+            if (error) {
+                console.log(error.message)
+            }
+            if (data) {
+                console.log(data)
+            }
+        }
+        retrieveFile()
+    }, [])
+
     return (
         <div className="application">
             <h2>Application Title: {applicationTitle}</h2>
             <h4>Application ID: {id}</h4>
-            <form>
+            <form onSubmit={applicationForm}>
                 <TextInput
                     label="Student Name"
                     radius="md"
@@ -78,6 +157,33 @@ const viewApp = () => {
                     value={student_number}
                     onChange={(e) => setStudentNumber(e.target.value)}
                 />
+                <TextInput
+                    label="Supervisor Full Name"
+                    radius="md"
+                    withAsterisk
+                    value={supervisor_name}
+                    onChange={(e) => setSupervisorName(e.target.value)}
+                />
+                <TextInput
+                    label="Supervisor Email"
+                    radius="md"
+                    withAsterisk
+                    value={supervisor_email}
+                    onChange={(e) => setSupervisorEmail(e.target.value)}
+                />
+                <h2>Section 0: Ethics Declaration Questions</h2>
+                <h3>Please tick the following boxes if your project will involve any of the following:</h3>
+                <Checkbox label="Human Participants" checked={human_participants} description="(including all types of interviews, questionnaires, focus groups, records relating to humans, use of online datasets or other secondary data, observations, usability testing, etc.)" onChange={(e) => setIsHumanParticipantsChecked(e.currentTarget.checked)} />
+                <Checkbox label="Testing Apparatus" checked={testing_apparatus} description="(including where you have developed new apparatus and are testing it for accuracy, including on yourself)" onChange={(e) => setIsTestingApparatusChecked(e.currentTarget.checked)} />
+                <h4>Risk to you, including:</h4>
+                <Checkbox label="Lone working during data collection" checked={lone_working} onChange={(e) => setIsLoneWorkingChecked(e.currentTarget.checked)} />
+                <Checkbox label="Travel to areas where you may be at risk" checked={travel_risk} onChange={(e) => setIsTravelRiskChecked(e.currentTarget.checked)} />
+                <Checkbox label="Risk of emotional distress" checked={emotional_risk} onChange={(e) => setIsEmotionalRiskChecked(e.currentTarget.checked)} />
+                <Checkbox label="Any risk to the environment" checked={environment_risk} onChange={(e) => setIsEnvironmentRiskChecked(e.currentTarget.checked)} />
+                <Checkbox label="Any conflict of interest" checked={conflict_interest} onChange={(e) => setIsConflictInterestChecked(e.currentTarget.checked)} />
+                <Checkbox label="Work/research that could be considered controversial or be of reputational risk to Aston University" checked={controversial_work} onChange={(e) => setIsControversialChecked(e.currentTarget.checked)} />
+                <Checkbox label="Social media data and/or data from internet sources that could be regarded as private" checked={data_risk} onChange={(e) => setIsDataRiskChecked(e.currentTarget.checked)} />
+                <TextInput label="Other: Please outline" radius="md" value={other_risk} onChange={(e) => setOtherRisk(e.target.value)} />
                 <h2>Section 1: Study Details</h2>
                 <h3>Please provide the following information about your study. Be as detailed as possible. Where a question is not relevant, please indicate ‘Not Applicable’ but also explain why you believe that to be so.</h3>
                 <Textarea
@@ -170,6 +276,19 @@ const viewApp = () => {
                     minRows={2}
                     onChange={(e) => setComments(e.target.value)}
                 />
+                <h2>Declaration</h2>
+                <p>Student:</p>
+                <TextInput label="Student Signature" placeholder="Print Name" withAsterisk radius="md" value={student_signature} onChange={(e) => setStudentSignature(e.target.value)} />
+                <p>Supervisor:</p>
+                <p>I confirm the following:</p>
+                <p>• That I have reviewed the content of this form and all associated paperwork and am happy with its standard and accuracy;</p>
+                <p>• That I shall monitor the student’s conduct of the study in accordance with the ethical approval granted (where applicable); and</p>
+                <p>• That I shall report to the person(s) granting ethical approval any breaches of approval and ensure that no data is included in the student’s work that has been collected in breach of approval.</p>
+                <TextInput label="Supervisor Signature" placeholder="Print Name" withAsterisk radius="md" value={supervisor_signature} onChange={(e) => setSupervisorSignature(e.target.value)} />
+                <Group position="right" mt="md">
+                    <Button type="submit">Submit</Button>
+                </Group>
+                {applicationError && <p className='error' style={{ color: "red" }}>{applicationError}</p>}
             </form>
         </div>
     )

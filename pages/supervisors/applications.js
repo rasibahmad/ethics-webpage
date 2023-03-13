@@ -3,17 +3,20 @@ import { Textarea, Box, Button, Group, SimpleGrid, Table } from '@mantine/core';
 import { supabase } from '../../client';
 import SupervisorApplicationTable from '../../components/supervisorApplicationTable';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import { useUser } from '@supabase/auth-helpers-react';
 
 export default function supervisorApplications() {
     const [fetchError, setFetchError] = useState(null)
     const [applicationsList, setApplicationsList] = useState([])
+    const user = useUser();
 
     useEffect(() => {
         const fetchApplications = async () => {
             const { data, error } = await supabase
                 .from('applications')
                 .select()
-                // only fetchs applications with status: Supervisor Review
+                // only fetchs applications with status = Supervisor Review and, logged in user email = supervisor email
+                .eq('supervisor_email', user.email)
                 .eq('status', 'Supervisor Review') 
 
             if (error) {
@@ -34,6 +37,7 @@ export default function supervisorApplications() {
         <Table highlightOnHover withBorder withColumnBorders>
             <thead>
                 <tr>
+                    <th>Student Name</th>
                     <th>Application Title</th>
                     <th>ID</th>
                     <th>Created Date</th>
