@@ -118,7 +118,8 @@ const viewApp = () => {
         const retrieveFile = async () => {
             const { data, error } = await supabase
                 .storage
-                .getBucket('documents')
+                .from('documents')
+                .list({search: 12})
 
             if (error) {
                 console.log(error.message)
@@ -128,7 +129,7 @@ const viewApp = () => {
             }
         }
         retrieveFile()
-    }, [])
+    }, [id])
 
     return (
         <div className="application">

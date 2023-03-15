@@ -1,4 +1,4 @@
-import { Textarea, Box, Button, Group, SimpleGrid, Table} from '@mantine/core';
+import { Textarea, Box, Button, Group, Paper, Table, Grid, Title } from '@mantine/core';
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../client';
 import ApplicationTable from '../components/ApplicationTable';
@@ -32,9 +32,9 @@ export default function Application() {
         if (data) {
             setApplicationError(null)
             const { error } = await supabase
-            .from('applications')
-            .update({user_id: user.id})
-            .eq('id', data[0].id)
+                .from('applications')
+                .update({ user_id: user.id })
+                .eq('id', data[0].id)
         }
     }
 
@@ -63,9 +63,9 @@ export default function Application() {
         if (data) {
             setQuestionError(null)
             const { error } = await supabase
-            .from('questions')
-            .update({user_id: user.id})
-            .eq('id', data[0].id)
+                .from('questions')
+                .update({ user_id: user.id })
+                .eq('id', data[0].id)
         }
     }
 
@@ -90,73 +90,86 @@ export default function Application() {
                 setApplicationsList(data)
                 setFetchError(null)
             }
-        }      
+        }
         fetchApplications()
     }, [])
 
     return (
-        <SimpleGrid cols={2} spacing="xl" verticalSpacing="xl">
-            <div className="create application">
-                <form onSubmit={createApplication}>
-                    <Box sx={{ maxWidth: 300 }} mx="auto" >
-                        <h2>Create Ethics Application</h2>
-                        <Textarea
-                            placeholder="E.g. Knowledge Elicitation"
-                            label="Name"
-                            description="Enter name of application to create"
-                            radius="md"
-                            withAsterisk
-                            onChange={(e) => setApplicationTitle(e.target.value)}
-                        />
-                        <Group position="right" mt="md">
-                            <Button type="submit">Create</Button>
-                        </Group>
-                        {applicationError && <p className='error' style={{ color: "red" }}>{applicationError}</p>}
-                    </Box>
-                </form>
-            </div>
-            <div className="create question">
-                <form onSubmit={createQuestion}>
-                    <Box sx={{ maxWidth: 300 }} mx="auto" >
-                        <h2>Ask Question</h2>
-                        <Textarea
-                            placeholder="E.g. Do I need approval for ...?"
-                            label="Question"
-                            description="Enter the full details of the question"
-                            radius="md"
-                            withAsterisk
-                            onChange={(e) => setQuestion(e.target.value)}
-                        />
-                        <Group position="right" mt="md">
-                            <Button type="submit">Submit</Button>
-                        </Group>
-                        {questionError && <p className='error' style={{ color: "red" }}>{questionError}</p>}
-                    </Box>
-                </form>
-            </div>
-            <div className="track applications" >
-            <h2>Track Applications</h2>
-                <Table highlightOnHover withBorder withColumnBorders>
-                    <thead>
-                        <tr>
-                        <th>Application Title</th>
-                        <th>ID</th>
-                        <th>Created Date</th>
-                        <th>Last Updated</th>
-                        <th>Status</th>
-                    </tr>
-                    </thead>
-                    {fetchError && <p className='error' style={{ color: "red" }}>{fetchError}</p>}
-                    <tbody>
-                    {applicationsList && (
-                        applicationsList.map(application => (
-                            <ApplicationTable key={application.id} application={application}/>
-                        ))
-                    )}
-                    </tbody>
-                </Table>
-            </div>
-        </SimpleGrid>
+        <Grid gutter="lg" justify="center">
+            <Grid.Col span={4}>
+                <Paper shadow="xl" p="xl" withBorder>
+                    <div className="create application">
+                        <form onSubmit={createApplication}>
+                            <Box sx={{ maxWidth: 300 }} mx="auto" >
+                                <Title order={3} align='center'>Create Ethics Application</Title>
+                                <br></br>
+                                <Textarea
+                                    placeholder="E.g. Knowledge Elicitation"
+                                    label="Name"
+                                    description="Enter name of application to create"
+                                    radius="md"
+                                    onChange={(e) => setApplicationTitle(e.target.value)}
+                                />
+                                <Group position="right" mt="md">
+                                    <Button type="submit">Create</Button>
+                                </Group>
+                                {applicationError && <p className='error' style={{ color: "red" }}>{applicationError}</p>}
+                            </Box>
+                        </form>
+                    </div>
+                </Paper>
+            </Grid.Col>
+            <Grid.Col span={4}>
+                <Paper shadow="xl" p="xl" withBorder>
+                    <div className="create question">
+                        <form onSubmit={createQuestion}>
+                            <Box sx={{ maxWidth: 300 }} mx="auto" >
+                                <Title order={3} align='center'>Ask Question</Title>
+                                <br></br>
+                                <Textarea
+                                    placeholder="E.g. Do I need approval for ...?"
+                                    label="Question"
+                                    description="Enter the full details of the question"
+                                    radius="md"
+                                    onChange={(e) => setQuestion(e.target.value)}
+                                />
+                                <Group position="right" mt="md">
+                                    <Button type="submit">Submit</Button>
+                                </Group>
+                                {questionError && <p className='error' style={{ color: "red" }}>{questionError}</p>}
+                            </Box>
+                        </form>
+                    </div>
+                </Paper>
+            </Grid.Col>
+            <Grid.Col span={8}>
+                <Paper shadow="xl" p="xl" withBorder>
+                    <div className="track applications" >
+                        <Title order={3} align='center'>Track Applications</Title>
+                        <br></br>
+                        <Table highlightOnHover withBorder withColumnBorders>
+                            <thead>
+                                <tr>
+                                    <th>Application Title</th>
+                                    <th>Application ID</th>
+                                    <th>Created Date</th>
+                                    <th>Last Updated</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            {fetchError && <p className='error' style={{ color: "red" }}>{fetchError}</p>}
+                            <tbody>
+                                {applicationsList && (
+                                    applicationsList.map(application => (
+                                        <ApplicationTable key={application.id} application={application} />
+                                    ))
+                                )}
+                            </tbody>
+                        </Table>
+                    </div>
+                </Paper>
+            </Grid.Col>
+        </Grid>
     )
 
 }
@@ -167,11 +180,11 @@ export const getServerSideProps = async (ctx) => {
     const supabase = createServerSupabaseClient(ctx)
     // checks if there is a session
     const {
-        data: { session },   
+        data: { session },
     } = await supabase.auth.getSession()
 
-    if (!session) 
-        return{
+    if (!session)
+        return {
             redirect: {
                 destination: '/login',
                 permanent: false,
