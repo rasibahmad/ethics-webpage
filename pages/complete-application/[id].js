@@ -35,6 +35,7 @@ const completeApp = () => {
   const [supervisor_name, setSupervisorName] = useState('')
   const [supervisor_email, setSupervisorEmail] = useState('')
 
+  // submitting form
   const applicationForm = async (e) => {
     e.preventDefault()
 
@@ -59,6 +60,7 @@ const completeApp = () => {
     }
   }
 
+  // fetching application 
   useEffect(() => {
     const fetchApplication = async () => {
       const { data, error } = await supabase
@@ -78,6 +80,7 @@ const completeApp = () => {
     fetchApplication()
   }, [id])
 
+  // updating checkboxes in form
   useEffect(() => {
     const checkbox = async () => {
       const { data, error } = await supabase
@@ -97,6 +100,7 @@ const completeApp = () => {
     checkbox()
   }, [isHumanParticipantsChecked, isTestingApparatusChecked, isLoneWorkingChecked, isTravelRiskChecked, isEmotionalRiskChecked, isEnvironmentRiskChecked, isConflictInterestChecked, isControversialChecked, isDataRiskChecked])
 
+  // uploading files function
   async function uploadFile(files) {
     const [file] = files
 
