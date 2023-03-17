@@ -18,7 +18,7 @@ const NavbarComponent = () => {
     return (
         <Navbar isBordered isCompact>
             <Navbar.Brand as={Link} href="/">
-                <img style={{ width: 60, height: 50 }} src={"./images/aston_logo.png"} />
+                <img style={{ width: 60, height: 50 }} src={"https://zanqrgclfkvzbsbmkpdt.supabase.co/storage/v1/object/public/images/aston_logo.png"} />
             </Navbar.Brand>
             <Navbar.Content hideIn="xs" variant="highlight-rounded">
                 <Navbar.Link href="/">Home</Navbar.Link>

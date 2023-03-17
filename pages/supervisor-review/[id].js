@@ -52,7 +52,7 @@ const viewApp = () => {
     const applicationForm = async (e) => {
         e.preventDefault()
 
-        if (!student_email || !student_name || !student_number || !supervisor_name || !supervisor_email || !project_objectives || !study_objectives || !data_collection_method || !data_collected || !participant_recruitment || !data_storage || !data_evidence || !risk || !student_signature) {
+        if (!student_email || !student_name || !student_number || !supervisor_name || !supervisor_email || !project_objectives || !study_objectives || !data_collection_method || !data_collected || !participant_recruitment || !data_storage || !data_evidence || !risk || !student_signature || !supervisor_signature) {
             setApplicationError('Please complete the application form')
             return
         }
@@ -79,7 +79,7 @@ const viewApp = () => {
 
         const { data, error } = await supabase.storage
             .from('documents')
-            .upload(id, file);
+            .upload(id + "/" + file?.name, file);
 
         if (error) {
             console.log(error)
@@ -141,7 +141,7 @@ const viewApp = () => {
             const { data, error } = await supabase
                 .storage
                 .from('documents')
-                .list(undefined, { search: id })
+                .list(id)
 
             if (error) {
                 console.log(error.message)
@@ -162,11 +162,13 @@ const viewApp = () => {
                         <Title order={3} align="center">Application Title: {applicationTitle}</Title>
                         <Title order={4} align="center">Application ID: {id}</Title>
                         <form onSubmit={applicationForm}>
+                            <Text>Attachments</Text>
                             <Text>{documents.map((document) => {
                                 return (
-                                    <Link href={CDNURL + document.name}> Download Attachments </Link>
+                                    <Link href={CDNURL + id + "/" + document.name} download> {document?.name} <br></br> </Link>
                                 )
                             })}</Text>
+                            <br></br>
                             <TextInput
                                 label="Student Name"
                                 radius="md"
@@ -308,9 +310,23 @@ const viewApp = () => {
                                 onChange={(e) => setRisk(e.target.value)}
                             />
                             <FileInput
-                                placeholder="Select Files"
+                                placeholder="Select File"
                                 label="Attachments"
                                 description="Upload all documents for intended study (.docx)"
+                                radius="md"
+                                multiple
+                                accept='.docx'
+                                onChange={(e) => uploadFile(e)}
+                            />
+                            <FileInput
+                                placeholder="Select File"
+                                radius="md"
+                                multiple
+                                accept='.docx'
+                                onChange={(e) => uploadFile(e)}
+                            />
+                            <FileInput
+                                placeholder="Select File"
                                 radius="md"
                                 multiple
                                 accept='.docx'
@@ -345,7 +361,6 @@ const viewApp = () => {
             </Grid>
         </div>
     )
-
 }
 
 export default viewApp

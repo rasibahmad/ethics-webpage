@@ -106,7 +106,7 @@ const completeApp = () => {
 
     const { data, error } = await supabase.storage
       .from('documents')
-      .upload(id, file);
+      .upload(id + "/" + file?.name, file);
 
     if (error) {
       console.log(error)
@@ -253,9 +253,23 @@ const completeApp = () => {
                 onChange={(e) => setRisk(e.target.value)}
               />
               <FileInput
-                placeholder="Select Files"
+                placeholder="Select File"
                 label="Attachments"
                 description="Upload all documents for intended study (.docx)"
+                radius="md"
+                multiple
+                accept='.docx'
+                onChange={(e) => uploadFile(e)}
+              />
+              <FileInput
+                placeholder="Select File"
+                radius="md"
+                multiple
+                accept='.docx'
+                onChange={(e) => uploadFile(e)}
+              />
+              <FileInput
+                placeholder="Select File"
                 radius="md"
                 multiple
                 accept='.docx'
