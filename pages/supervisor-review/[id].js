@@ -77,7 +77,8 @@ const viewApp = () => {
     async function uploadFile(files) {
         const [file] = files
 
-        const { data, error } = await supabase.storage
+        const { data, error } = await supabase
+            .storage
             .from('documents')
             .upload(id + "/" + file?.name, file);
 
@@ -154,6 +155,17 @@ const viewApp = () => {
         retrieveFile()
     }, [id])
 
+    {/* async function deleteFile(files) {
+        const [file] = files
+        console.log(file)
+        console.log(files)
+
+        const { data, error } = await supabase
+            .storage
+            .from('documents')
+            .remove([id + '/' + file?.name])
+    } */}
+
     return (
         <div className="application">
             <Grid gutter="lg" justify="center">
@@ -165,7 +177,10 @@ const viewApp = () => {
                             <Text>Attachments</Text>
                             <Text>{documents.map((document) => {
                                 return (
-                                    <Link href={CDNURL + id + "/" + document.name} download> {document?.name} <br></br> </Link>
+                                    <div>
+                                        <Link href={CDNURL + id + "/" + document.name} download> {document?.name} <br></br> </Link>
+                                        {/* <Button color="red" onClick={deleteFile(document)}>Delete {document?.name}</Button> */}
+                                    </div>
                                 )
                             })}</Text>
                             <br></br>

@@ -2,18 +2,33 @@ import { Navbar, Button, Text } from "@nextui-org/react";
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Login from '../pages/login/index'
 
 const NavbarComponent = () => {
     const supabase = useSupabaseClient();
     const user = useUser();
     const router = useRouter();
+    const [user_role, setUserRole] = useState('')
 
     function signOutUser() {
         supabase.auth.signOut();
         router.push("/login"); 
     }
+
+    useEffect(() => {
+        const identifyUser = async () => {
+            const { data, error } = await supabase
+                .from('profiles')
+                .select()
+                .eq('id', user?.id)
+            
+            if (data) {
+                setUserRole(data.user_role)
+            }
+        }
+        identifyUser()
+    }, [])
 
     return (
         <Navbar isBordered isCompact>
