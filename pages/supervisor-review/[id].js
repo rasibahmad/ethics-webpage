@@ -35,6 +35,7 @@ const viewApp = () => {
     const [emotional_risk, setEmotionalRisk] = useState(false)
     const [isEmotionalRiskChecked, setIsEmotionalRiskChecked] = useState(false)
     const [other_risk, setOtherRisk] = useState('')
+    const [other_personal_risk, setOtherPersonalRisk] = useState('')
     const [environment_risk, setEnvironmentRisk] = useState(false)
     const [isEnvironmentRiskChecked, setIsEnvironmentRiskChecked] = useState(false)
     const [conflict_interest, setConflictInterest] = useState(false)
@@ -126,6 +127,7 @@ const viewApp = () => {
                 setTravelRisk(data.travel_risk)
                 setEmotionalRisk(data.emotional_risk)
                 setOtherRisk(data.other_risk)
+                setOtherPersonalRisk(data.other_personal_risk)
                 setEnvironmentRisk(data.environment_risk)
                 setConflictInterest(data.conflict_interest)
                 setControverisalWork(data.controversial_work)
@@ -179,7 +181,7 @@ const viewApp = () => {
                                 return (
                                     <div>
                                         <Link href={CDNURL + id + "/" + document.name} download> {document?.name} <br></br> </Link>
-                                        {/* <Button color="red" onClick={deleteFile(document)}>Delete {document?.name}</Button> */}
+                                        <Button color="red">Delete</Button>
                                     </div>
                                 )
                             })}</Text>
@@ -223,21 +225,46 @@ const viewApp = () => {
                             <br></br>
                             <br></br>
                             <Title order={3}>Section 0: Ethics Declaration Questions</Title>
+                            <br></br>
+                            <Text fw="700">The following are Not Permitted:</Text>
+                            <Text fz="sm">
+                                • The NHS – either patients selected via the NHS or clinical staff working for the NHS
+                            </Text>
+                            <Text fz="sm">
+                                • Participants under the age of 18
+                            </Text>
+                            <Text fz="sm">
+                                • Vulnerable groups – individuals with physical disabilities, mental health disabilities/ill health, individuals with learning difficulties, prisoners/detained persons, people over 65 years of age, and/or pregnant women
+                            </Text>
+                            <Text fz="sm">
+                                • Any of the following: i) clinical procedures or ii) physical intervention or iii) penetration of the participant's body or iv) prescription of compounds additional to normal diet or other dietary manipulation/supplementation or v) collection of bodily secretions or vi) involve human tissue which comes within the Human Tissue Act (e.g., surgical operations; taking body samples including blood and DNA; exposure to ionizing or other radiation; exposure to sound light or radio waves; psychophysiological procedures such as fMRI, MEG, TMS, EEG, ECG, exercise and stress procedures; administration of any chemical substances)
+                            </Text>
+                            <Text fz="sm">
+                                • Delving into topics that might be sensitive, embarrassing or upsetting or where it is possible that criminal or other disclosures requiring action could take place (e.g., during interviews) – including but not limited to projects focusing on mental health
+                            </Text>
+                            <br></br>
+                            <Text fz="sm">
+                                We would, for the purposes of your FYP, strongly advocate that you do not propose or insist on a project that would fall into these categories. If this is unavoidable, please submit a question to discuss or add details in 'Any other ethical considerations'; any and all such projects would require College level ethical approval which can take anything upwards of a month or two to acquire and, even then, approval is unlikely due to the risks associated with such studies.
+                            </Text>
+                            <br></br>
+                            <br></br>
                             <Title order={4}>Please tick the following boxes if your project will involve any of the following:</Title>
                             <br></br>
                             <Checkbox label="Human Participants" checked={human_participants} description="(including all types of interviews, questionnaires, focus groups, records relating to humans, use of online datasets or other secondary data, observations, usability testing, etc.)" onChange={(e) => setIsHumanParticipantsChecked(e.currentTarget.checked)} />
                             <Checkbox label="Testing Apparatus" checked={testing_apparatus} description="(including where you have developed new apparatus and are testing it for accuracy, including on yourself)" onChange={(e) => setIsTestingApparatusChecked(e.currentTarget.checked)} />
                             <br></br>
                             <Title order={4}>Risk to you, including:</Title>
-                            <br></br>
                             <Checkbox label="Lone working during data collection" checked={lone_working} onChange={(e) => setIsLoneWorkingChecked(e.currentTarget.checked)} />
                             <Checkbox label="Travel to areas where you may be at risk" checked={travel_risk} onChange={(e) => setIsTravelRiskChecked(e.currentTarget.checked)} />
                             <Checkbox label="Risk of emotional distress" checked={emotional_risk} onChange={(e) => setIsEmotionalRiskChecked(e.currentTarget.checked)} />
+                            <Textarea label="Other: please outline" value={other_personal_risk} radius="md" autosize minRows={2} onChange={(e) => setOtherPersonalRisk(e.target.value)} />
+                            <br></br>
+                            <br></br>
                             <Checkbox label="Any risk to the environment" checked={environment_risk} onChange={(e) => setIsEnvironmentRiskChecked(e.currentTarget.checked)} />
                             <Checkbox label="Any conflict of interest" checked={conflict_interest} onChange={(e) => setIsConflictInterestChecked(e.currentTarget.checked)} />
                             <Checkbox label="Work/research that could be considered controversial or be of reputational risk to Aston University" checked={controversial_work} onChange={(e) => setIsControversialChecked(e.currentTarget.checked)} />
                             <Checkbox label="Social media data and/or data from internet sources that could be regarded as private" checked={data_risk} onChange={(e) => setIsDataRiskChecked(e.currentTarget.checked)} />
-                            <Textarea label="Other: Please outline" radius="md" autosize minRows={2} value={other_risk} onChange={(e) => setOtherRisk(e.target.value)} />
+                            <Textarea label="Any other ethical considerations" description="(please state here or contact the Research Ethics Officer via your College Ethics inbox if there are any substantial ethical considerations you are aware of and would like to flag for the REC.)" radius="md" value={other_risk} autosize minRows={2} onChange={(e) => setOtherRisk(e.target.value)} />
                             <br></br>
                             <br></br>
                             <Title order={3}>Section 1: Study Details</Title>

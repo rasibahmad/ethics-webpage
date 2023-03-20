@@ -3,7 +3,6 @@ import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import Login from '../pages/login/index'
 
 const NavbarComponent = () => {
     const supabase = useSupabaseClient();
@@ -38,6 +37,7 @@ const NavbarComponent = () => {
             <Navbar.Content hideIn="xs" variant="highlight-rounded">
                 <Navbar.Link href="/">Home</Navbar.Link>
                 <Navbar.Link href="/applications">Applications</Navbar.Link>
+                <Navbar.Link href="/FAQ">FAQs</Navbar.Link>
             </Navbar.Content>
 
             <Navbar.Content>
