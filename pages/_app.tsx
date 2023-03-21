@@ -1,9 +1,11 @@
 import { MantineProvider, Box } from '@mantine/core'
+import { NextUIProvider, useSSR } from '@nextui-org/react'
 import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs'
 import { SessionContextProvider, Session, useSession } from '@supabase/auth-helpers-react'
 import { AppProps } from 'next/app'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Navbar from '../components/NavbarComponent'
+import '../styles/form.css'
 
 export default function MyApp({
   Component,
@@ -13,13 +15,14 @@ export default function MyApp({
 }>) {
 
   const [supabaseClient] = useState(() => createBrowserSupabaseClient())
+  const { isBrowser } = useSSR()
 
   return (
     <SessionContextProvider
       supabaseClient={supabaseClient}
       initialSession={pageProps.initialSession}
     >
-      <MantineProvider>
+        <MantineProvider>
         <Navbar />
         <Box
           sx={(theme) => ({

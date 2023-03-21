@@ -1,4 +1,4 @@
-import { Textarea, Group, Button, TextInput, Text, Checkbox, FileInput, Title, Paper, Grid } from '@mantine/core'
+import { Textarea, Group, Button, TextInput, Text, Checkbox, FileInput, Title, Paper, Grid, ActionIcon } from '@mantine/core'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -157,16 +157,28 @@ const viewApp = () => {
         retrieveFile()
     }, [id])
 
-    {/* async function deleteFile(files) {
-        const [file] = files
-        console.log(file)
-        console.log(files)
-
+    // delete files from application
+    async function deleteFile({ name }) {
         const { data, error } = await supabase
             .storage
             .from('documents')
-            .remove([id + '/' + file?.name])
-    } */}
+            .remove([id + '/' + name])
+
+        // refresh page and documents list
+        if (data) {
+            const { data, error } = await supabase
+                .storage
+                .from('documents')
+                .list(id)
+
+            if (error) {
+                console.log(error.message)
+            }
+            if (data) {
+                setDocuments(data)
+            }
+        }
+    }
 
     return (
         <div className="application">
@@ -179,9 +191,9 @@ const viewApp = () => {
                             <Text>Attachments</Text>
                             <Text>{documents.map((document) => {
                                 return (
-                                    <div>
+                                    <div className='attachment'>
                                         <Link href={CDNURL + id + "/" + document.name} download> {document?.name} <br></br> </Link>
-                                        <Button color="red">Delete</Button>
+                                        <img style={{ width: 22, height: 20 }} onClick={() => deleteFile(document)} src={"https://zanqrgclfkvzbsbmkpdt.supabase.co/storage/v1/object/public/images/trash-var-solid.png"} />
                                     </div>
                                 )
                             })}</Text>
