@@ -1,5 +1,6 @@
 import { MantineProvider, Box } from '@mantine/core'
 import { NextUIProvider, useSSR } from '@nextui-org/react'
+import { SSRProvider } from '@react-aria/ssr'
 import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs'
 import { SessionContextProvider, Session, useSession } from '@supabase/auth-helpers-react'
 import { AppProps } from 'next/app'

@@ -94,6 +94,7 @@ export default function Application() {
         fetchApplications()
     }, [])
 
+
     return (
         <Grid gutter="lg" justify="center">
             <Grid.Col span={4}>
@@ -155,6 +156,7 @@ export default function Application() {
                                     <th>Created Date</th>
                                     <th>Last Updated</th>
                                     <th>Status</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             {fetchError && <p className='error' style={{ color: "red" }}>{fetchError}</p>}

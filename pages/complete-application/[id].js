@@ -1,4 +1,4 @@
-import { Textarea, Group, Button, TextInput, Checkbox, FileInput, Title, Paper, Grid } from '@mantine/core'
+import { Textarea, Group, Button, TextInput, Text, Checkbox, FileInput, Title, Paper, Grid } from '@mantine/core'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { supabase } from '../../client'
