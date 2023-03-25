@@ -47,6 +47,7 @@ const viewApp = () => {
     const [student_signature, setStudentSignature] = useState('')
     const [supervisor_signature, setSupervisorSignature] = useState('')
     const [documents, setDocuments] = useState([])
+    const [supervisor_comment, setSupervisorComment] = useState('')
     const CDNURL = "https://zanqrgclfkvzbsbmkpdt.supabase.co/storage/v1/object/public/documents/";
 
     // submitting form
@@ -60,7 +61,7 @@ const viewApp = () => {
 
         const { data, error } = await supabase
             .from('applications')
-            .update({ student_email, student_number, student_name, supervisor_name, supervisor_email, other_risk, project_objectives, study_objectives, data_collection_method, data_collected, participant_recruitment, data_storage, data_evidence, risk, comments, status: "Supervisor Approved", student_signature, supervisor_signature })
+            .update({ student_email, student_number, student_name, supervisor_name, supervisor_email, other_risk, project_objectives, study_objectives, data_collection_method, data_collected, participant_recruitment, data_storage, data_evidence, risk, comments, status: "Supervisor Approved", student_signature, supervisor_signature, supervisor_comment })
             .eq('id', id)
             .select()
 
@@ -133,6 +134,7 @@ const viewApp = () => {
                 setControverisalWork(data.controversial_work)
                 setDataRisk(data.data_risk)
                 setStudentSignature(data.student_signature)
+                setSupervisorComment(data.supervisor_comment)
             }
         }
         fetchApplication()
@@ -179,6 +181,19 @@ const viewApp = () => {
             }
         }
     }
+
+    async function denyApplication() {
+        const { data, error } = await supabase
+            .from('applications')
+            .update({ student_email, student_number, student_name, supervisor_name, supervisor_email, other_risk, project_objectives, study_objectives, data_collection_method, data_collected, participant_recruitment, data_storage, data_evidence, risk, comments, status: "Supervisor Denied", student_signature, supervisor_comment })
+            .eq('id', id)
+            .select()
+
+        if (data) {
+            router.push('/supervisors/applications')
+        }
+    }
+
 
     return (
         <div className="application">
@@ -395,6 +410,16 @@ const viewApp = () => {
                                 minRows={2}
                                 onChange={(e) => setComments(e.target.value)}
                             />
+                            <Textarea
+                                placeholder="Optional comments visible to student only"
+                                label="Supervisor Comments"
+                                description="Enter comments for student if application requires changes"
+                                radius="md"
+                                value={supervisor_comment}
+                                autosize
+                                minRows={2}
+                                onChange={(e) => setSupervisorComment(e.target.value)}
+                            />
                             <br></br>
                             <br></br>
                             <Title order={3}>Declaration</Title>
@@ -406,7 +431,8 @@ const viewApp = () => {
                             <p>• That I shall report to the person(s) granting ethical approval any breaches of approval and ensure that no data is included in the student’s work that has been collected in breach of approval.</p>
                             <TextInput label="Supervisor Signature" placeholder="Print Name" withAsterisk radius="md" value={supervisor_signature} onChange={(e) => setSupervisorSignature(e.target.value)} />
                             <Group position="right" mt="md">
-                                <Button type="submit">Submit</Button>
+                                <Button type="submit">Approve</Button>
+                                <Button onClick={() => denyApplication()} color="red">Deny</Button>
                             </Group>
                             {applicationError && <p className='error' style={{ color: "red" }}>{applicationError}</p>}
                         </form>

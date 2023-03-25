@@ -17,7 +17,7 @@ export default function supervisorApplications() {
                 .select()
                 // only fetchs applications with status = Supervisor Review and, logged in user email = supervisor email
                 .eq('supervisor_email', user.email)
-                .eq('status', 'Supervisor Review')
+                // .eq('status', 'Supervisor Review')
 
             if (error) {
                 setFetchError('No Applications Found')
