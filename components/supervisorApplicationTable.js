@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 
-const SupervisorApplicationTable = ({application, setApplicationId }) => {
+const SupervisorApplicationTable = ({ application }) => {
   const { id, student_name, applicationTitle, created_at, updated_at, status } = application  
   const router = useRouter()
 
@@ -15,8 +15,8 @@ const SupervisorApplicationTable = ({application, setApplicationId }) => {
   
     return (
         <tr>
-            <td onClick={() => router.push(`/supervisor-review/${id}`)}>{student_name}</td>
-            <td onClick={() => router.push(`/supervisor-review/${id}`)}>{applicationTitle}</td>
+            <td className={application.status === 'Supervisor Review' ? 'clickable' : ''} onClick={() => router.push(`/supervisor-review/${id}`)}>{student_name}</td>
+            <td className={application.status === 'Supervisor Review' ? 'clickable' : ''} onClick={() => router.push(`/supervisor-review/${id}`)}>{applicationTitle}</td>
             <td>{id}</td>
             <td>{formattedCreatedDate}</td>
             <td>{formattedUpdatedDate}</td>

@@ -1,9 +1,8 @@
 import { Button } from '@mantine/core'
 import { useRouter } from 'next/router'
 import { supabase } from '../client';
-import { Link } from '@mantine/core'
 
-const ApplicationTable = ({ application, setApplicationId }) => {
+const ApplicationTable = ({ application }) => {
     const { id, applicationTitle, created_at, updated_at, status } = application
     const router = useRouter()
 
@@ -39,14 +38,30 @@ const ApplicationTable = ({ application, setApplicationId }) => {
 
     return (
         <tr>
-            <td onClick={() => router.push(`/complete-application/${id}`)}>{applicationTitle}</td>
-            <td>{id}</td>
+            {status === 'Not Submitted' ? (
+                <td className='clickable' onClick={() => router.push(`/complete-application/${id}`)}>{applicationTitle}</td>
+            ) : status === 'Supervisor Denied' ? (
+                <td className='clickable' onClick={() => router.push(`/supervisor-denied/${id}`)}>{applicationTitle}</td>
+            ) : status === 'Supervisor Approved' ? (
+                <td className='clickable' onClick={() => router.push(`/supervisor-approved/${id}`)}>{applicationTitle}</td>
+            ) : (
+                <td>{applicationTitle}</td>
+            )}
+            {status === 'Not Submitted' ? (
+                <td className='clickable' onClick={() => router.push(`/complete-application/${id}`)}>{id}</td>
+            ) : status === 'Supervisor Denied' ? (
+                <td className='clickable' onClick={() => router.push(`/supervisor-denied/${id}`)}>{id}</td>
+            ) : status === 'Supervisor Approved' ? (
+                <td className='clickable' onClick={() => router.push(`/supervisor-approved/${id}`)}>{id}</td>
+            ) : (
+                <td>{id}</td>
+            )}
             <td>{formattedCreatedDate}</td>
             <td>{formattedUpdatedDate}</td>
             <td>{status}</td>
-            {application.status === "Not Submitted" ? (
+            {status === "Not Submitted" ? (
                 <td><Button color="red" onClick={() => deleteApplication()}>Delete</Button></td>
-            ) : application.status === "Supervisor Review" ? (
+            ) : status === "Supervisor Review" ? (
                 <td><Button color="orange" onClick={() => updateStatus()}>Cancel</Button></td>
             ) : (
                 <td></td>

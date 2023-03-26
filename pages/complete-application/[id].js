@@ -35,6 +35,7 @@ const completeApp = () => {
   const [student_signature, setStudentSignature] = useState('')
   const [supervisor_name, setSupervisorName] = useState('')
   const [supervisor_email, setSupervisorEmail] = useState('')
+  const disableSubmit = !student_email || !student_name || !student_number || !supervisor_name || !supervisor_email || !project_objectives || !study_objectives || !data_collection_method || !data_collected || !participant_recruitment || !data_storage || !data_evidence || !risk || !student_signature
 
   // submitting form
   const applicationForm = async (e) => {
@@ -280,7 +281,7 @@ const completeApp = () => {
               />
               <FileInput
                 placeholder="Select File"
-                label="Attachments"
+                label="Upload Documents"
                 description="Upload all documents for intended study (.docx)"
                 radius="md"
                 multiple
@@ -312,18 +313,19 @@ const completeApp = () => {
               <br></br>
               <br></br>
               <Title order={3}>Declaration</Title>
-              <p>Student:</p>
-              <p>I confirm the following:</p>
-              <p>• The above is an accurate representation of my study activities;</p>
-              <p>• That I shall not commence participant recruitment and/or data collection without ethical approval to do so (where applicable);</p>
-              <p>• That I shall seek further ethical approval should I need to make any changes to my study after ethical approval has been granted (where applicable);</p>
-              <p>• That I shall conduct my study with integrity and in accordance with the ethical approval granted (where applicable);</p>
-              <p>• That, where necessary, I shall use existing or secondary data in accordance with terms and conditions of use or ethical approval, as applicable;</p>
-              <p>• That I understand that if I breach the terms of the approval granted I may not be able to use the data collected in my project report and may face disciplinary procedures; and</p>
-              <p>• That I shall respect my participants (where applicable) and the data I have collected and am using.</p>
+              <Text>Student:</Text>
+              <Text fz="sm">I confirm the following:</Text>
+              <Text fz="sm">• The above is an accurate representation of my study activities;</Text>
+              <Text fz="sm">• That I shall not commence participant recruitment and/or data collection without ethical approval to do so (where applicable);</Text>
+              <Text fz="sm">• That I shall seek further ethical approval should I need to make any changes to my study after ethical approval has been granted (where applicable);</Text>
+              <Text fz="sm">• That I shall conduct my study with integrity and in accordance with the ethical approval granted (where applicable);</Text>
+              <Text fz="sm">• That, where necessary, I shall use existing or secondary data in accordance with terms and conditions of use or ethical approval, as applicable;</Text>
+              <Text fz="sm">• That I understand that if I breach the terms of the approval granted I may not be able to use the data collected in my project report and may face disciplinary procedures; and</Text>
+              <Text fz="sm">• That I shall respect my participants (where applicable) and the data I have collected and am using.</Text>
+              <br></br>
               <TextInput label="Student Signature" placeholder="Print Name" withAsterisk radius="md" onChange={(e) => setStudentSignature(e.target.value)} />
               <Group position="right" mt="md">
-                <Button type="submit">Submit</Button>
+                <Button disabled={disableSubmit} type="submit">Submit to Supervisor</Button>
               </Group>
               {applicationError && <p className='error' style={{ color: "red" }}>{applicationError}</p>}
             </form>

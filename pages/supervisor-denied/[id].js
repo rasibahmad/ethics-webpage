@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { supabase } from '../../client'
 
-const supervisorReview = () => {
+const supervisorDenied = () => {
     const router = useRouter()
     const { id } = router.query
     const [applicationTitle, setApplicationTitle] = useState('')
@@ -48,21 +48,21 @@ const supervisorReview = () => {
     const [supervisor_signature, setSupervisorSignature] = useState('')
     const [documents, setDocuments] = useState([])
     const [supervisor_comment, setSupervisorComment] = useState('')
-    const disableApprove = !student_email || !student_name || !student_number || !supervisor_name || !supervisor_email || !project_objectives || !study_objectives || !data_collection_method || !data_collected || !participant_recruitment || !data_storage || !data_evidence || !risk || !student_signature || !supervisor_signature
     const CDNURL = "https://zanqrgclfkvzbsbmkpdt.supabase.co/storage/v1/object/public/documents/";
+    const disableSubmit = !student_email || !student_name || !student_number || !supervisor_name || !supervisor_email || !project_objectives || !study_objectives || !data_collection_method || !data_collected || !participant_recruitment || !data_storage || !data_evidence || !risk || !student_signature
 
     // submitting form
     const applicationForm = async (e) => {
         e.preventDefault()
 
-        if (!student_email || !student_name || !student_number || !supervisor_name || !supervisor_email || !project_objectives || !study_objectives || !data_collection_method || !data_collected || !participant_recruitment || !data_storage || !data_evidence || !risk) {
+        if (!student_email || !student_name || !student_number || !supervisor_name || !supervisor_email || !project_objectives || !study_objectives || !data_collection_method || !data_collected || !participant_recruitment || !data_storage || !data_evidence || !risk || !student_signature) {
             setApplicationError('Please complete the application form')
             return
         }
 
         const { data, error } = await supabase
             .from('applications')
-            .update({ student_email, student_number, student_name, supervisor_name, supervisor_email, other_risk, project_objectives, study_objectives, data_collection_method, data_collected, participant_recruitment, data_storage, data_evidence, risk, comments, status: "Supervisor Approved", student_signature, supervisor_signature, supervisor_comment })
+            .update({ student_email, student_number, student_name, supervisor_name, supervisor_email, other_risk, project_objectives, study_objectives, data_collection_method, data_collected, participant_recruitment, data_storage, data_evidence, risk, comments, status: "Supervisor Review", student_signature })
             .eq('id', id)
             .select()
 
@@ -72,7 +72,7 @@ const supervisorReview = () => {
 
         if (data) {
             setApplicationError(null)
-            router.push('/supervisors/applications')
+            router.push('/applications')
         }
     }
 
@@ -104,7 +104,7 @@ const supervisorReview = () => {
                 .single()
 
             if (error) {
-                // router.push('/supervisors/applications')
+                // router.push('/applications')
             }
 
             if (data) {
@@ -134,7 +134,6 @@ const supervisorReview = () => {
                 setConflictInterest(data.conflict_interest)
                 setControverisalWork(data.controversial_work)
                 setDataRisk(data.data_risk)
-                setStudentSignature(data.student_signature)
                 setSupervisorComment(data.supervisor_comment)
             }
         }
@@ -183,19 +182,6 @@ const supervisorReview = () => {
         }
     }
 
-    async function denyApplication() {
-        const { data, error } = await supabase
-            .from('applications')
-            .update({ student_email, student_number, student_name, supervisor_name, supervisor_email, other_risk, project_objectives, study_objectives, data_collection_method, data_collected, participant_recruitment, data_storage, data_evidence, risk, comments, status: "Supervisor Denied", student_signature, supervisor_comment })
-            .eq('id', id)
-            .select()
-
-        if (data) {
-            router.push('/supervisors/applications')
-        }
-    }
-
-
     return (
         <div className="application">
             <Grid gutter="lg" justify="center">
@@ -204,6 +190,16 @@ const supervisorReview = () => {
                         <Title order={3} align="center">Application Title: {applicationTitle}</Title>
                         <Title order={4} align="center">Application ID: {id}</Title>
                         <form onSubmit={applicationForm}>
+                            <Textarea
+                                placeholder="Optional comments visible to student only"
+                                label="Supervisor Comments"
+                                description="Comments are only visible to you and will not be submitted in the application"
+                                value={supervisor_comment}
+                                radius="md"
+                                autosize
+                                minRows={2}
+                            />
+                            <br />
                             <Text>Attachments</Text>
                             <Text>{documents.map((document) => {
                                 return (
@@ -381,7 +377,7 @@ const supervisorReview = () => {
                             />
                             <FileInput
                                 placeholder="Select File"
-                                label="Attachments"
+                                label="Upload Documents"
                                 description="Upload all documents for intended study (.docx)"
                                 radius="md"
                                 multiple
@@ -411,30 +407,22 @@ const supervisorReview = () => {
                                 minRows={2}
                                 onChange={(e) => setComments(e.target.value)}
                             />
-                            <Textarea
-                                placeholder="Optional comments visible to student only"
-                                label="Supervisor Comments"
-                                description="Enter comments for student if application requires changes"
-                                radius="md"
-                                autosize
-                                minRows={2}
-                                onChange={(e) => setSupervisorComment(e.target.value)}
-                            />
                             <br></br>
                             <br></br>
                             <Title order={3}>Declaration</Title>
-                            <TextInput label="Student Signature" placeholder="Print Name" withAsterisk radius="md" value={student_signature} onChange={(e) => setStudentSignature(e.target.value)} />
-                            <br></br>
-                            <Text fw="700">Supervisor:</Text>
+                            <Text>Student:</Text>
                             <Text fz="sm">I confirm the following:</Text>
-                            <Text fz="sm">• That I have reviewed the content of this form and all associated paperwork and am happy with its standard and accuracy;</Text>
-                            <Text fz="sm">• That I shall monitor the student’s conduct of the study in accordance with the ethical approval granted (where applicable); and</Text>
-                            <Text fz="sm">• That I shall report to the person(s) granting ethical approval any breaches of approval and ensure that no data is included in the student’s work that has been collected in breach of approval.</Text>
+                            <Text fz="sm">• The above is an accurate representation of my study activities;</Text>
+                            <Text fz="sm">• That I shall not commence participant recruitment and/or data collection without ethical approval to do so (where applicable);</Text>
+                            <Text fz="sm">• That I shall seek further ethical approval should I need to make any changes to my study after ethical approval has been granted (where applicable);</Text>
+                            <Text fz="sm">• That I shall conduct my study with integrity and in accordance with the ethical approval granted (where applicable);</Text>
+                            <Text fz="sm">• That, where necessary, I shall use existing or secondary data in accordance with terms and conditions of use or ethical approval, as applicable;</Text>
+                            <Text fz="sm">• That I understand that if I breach the terms of the approval granted I may not be able to use the data collected in my project report and may face disciplinary procedures; and</Text>
+                            <Text fz="sm">• That I shall respect my participants (where applicable) and the data I have collected and am using.</Text>
                             <br></br>
-                            <TextInput label="Supervisor Signature" placeholder="Print Name" withAsterisk radius="md" value={supervisor_signature} onChange={(e) => setSupervisorSignature(e.target.value)} />
+                            <TextInput label="Student Signature" placeholder="Print Name" withAsterisk radius="md" onChange={(e) => setStudentSignature(e.target.value)} />
                             <Group position="right" mt="md">
-                                <Button disabled={disableApprove} type="submit">Approve</Button>
-                                <Button onClick={() => denyApplication()} color="red">Deny</Button>
+                                <Button disabled={disableSubmit} type="submit">Submit to Supervisor</Button>
                             </Group>
                             {applicationError && <p className='error' style={{ color: "red" }}>{applicationError}</p>}
                         </form>
@@ -445,4 +433,4 @@ const supervisorReview = () => {
     )
 }
 
-export default supervisorReview
+export default supervisorDenied
