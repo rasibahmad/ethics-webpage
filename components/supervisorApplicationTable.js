@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router'
+import { Button } from '@mantine/core'
 
 const SupervisorApplicationTable = ({ application }) => {
   const { id, student_name, applicationTitle, created_at, updated_at, status } = application  
@@ -15,12 +16,17 @@ const SupervisorApplicationTable = ({ application }) => {
   
     return (
         <tr>
-            <td className={application.status === 'Supervisor Review' ? 'clickable' : ''} onClick={() => router.push(`/supervisor-review/${id}`)}>{student_name}</td>
-            <td className={application.status === 'Supervisor Review' ? 'clickable' : ''} onClick={() => router.push(`/supervisor-review/${id}`)}>{applicationTitle}</td>
+            <td className={status === 'Supervisor Review' ? 'clickable' : ''} onClick={() => router.push(`/supervisor-review/${id}`)}>{student_name}</td>
+            <td className={status === 'Supervisor Review' ? 'clickable' : ''} onClick={() => router.push(`/supervisor-review/${id}`)}>{applicationTitle}</td>
             <td>{id}</td>
             <td>{formattedCreatedDate}</td>
             <td>{formattedUpdatedDate}</td>
             <td>{status}</td>
+            {status === 'Supervisor Review' ? (
+                <td><Button onClick={() => router.push(`/supervisor-review/${id}`)}>Review and Sign</Button></td>
+            ) : (
+                <td><Button onClick={() => router.push(`/supervisor-view/${id}`)}>View</Button></td>
+            )}
         </tr>
     )
 }

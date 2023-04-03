@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Textarea, Box, Button, Group, SimpleGrid, Paper, Table, Title, Grid } from '@mantine/core';
+import { Paper, Table, Title, Grid } from '@mantine/core';
 import { supabase } from '../../client';
 import SupervisorApplicationTable from '../../components/supervisorApplicationTable';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
@@ -15,9 +15,9 @@ export default function supervisorApplications() {
             const { data, error } = await supabase
                 .from('applications')
                 .select()
-                // only fetchs applications with status = Supervisor Review and, logged in user email = supervisor email
                 .eq('supervisor_email', user.email)
-                // .eq('status', 'Supervisor Review')
+                .eq('status', 'Supervisor Review')
+                .or('status.eq.Supervisor Approved,status.eq.Submitted')
 
             if (error) {
                 setFetchError('No Applications Found')
@@ -26,6 +26,7 @@ export default function supervisorApplications() {
             }
 
             if (data) {
+                console.log(data)
                 setApplicationsList(data)
                 setFetchError(null)
             }
@@ -48,6 +49,7 @@ export default function supervisorApplications() {
                                 <th>Created Date</th>
                                 <th>Last Updated</th>
                                 <th>Status</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         {fetchError && <p className='error' style={{ color: "red" }}>{fetchError}</p>}

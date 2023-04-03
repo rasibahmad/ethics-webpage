@@ -36,6 +36,19 @@ const ApplicationTable = ({ application }) => {
             .select()
     }
 
+    // submit approved application to ethics team
+    async function submitApproved() {
+        const { data, error } = await supabase
+            .from('applications')
+            .update({ status: "Submitted" })
+            .eq('id', id)
+            .select()
+        
+        if (data) {
+            router.push('/applications')
+        }
+    }
+
     return (
         <tr>
             {status === 'Not Submitted' ? (
@@ -59,10 +72,18 @@ const ApplicationTable = ({ application }) => {
             <td>{formattedCreatedDate}</td>
             <td>{formattedUpdatedDate}</td>
             <td>{status}</td>
+            {/* Action */}
             {status === "Not Submitted" ? (
-                <td><Button color="red" onClick={() => deleteApplication()}>Delete</Button></td>
+                <td>
+                    <Button onClick={() => router.push(`/complete-application/${id}`)}>Edit</Button>
+                    <Button color="red" onClick={() => deleteApplication()}>Delete</Button>
+                </td>
             ) : status === "Supervisor Review" ? (
                 <td><Button color="orange" onClick={() => updateStatus()}>Cancel</Button></td>
+            ) : status === "Supervisor Approved" ? (
+                <td><Button onClick={() => submitApproved()}>Submit</Button></td>
+            ) : status === "Supervisor Denied" ? (
+                <td><Button onClick={() => router.push(`/supervisor-denied/${id}`)}>Edit</Button></td>
             ) : (
                 <td></td>
             )}
