@@ -104,7 +104,7 @@ const supervisorDenied = () => {
                 .single()
 
             if (error) {
-                // router.push('/applications')
+                router.push('/applications')
             }
 
             if (data) {
@@ -187,11 +187,11 @@ const supervisorDenied = () => {
             <Grid gutter="lg" justify="center">
                 <Grid.Col span={8}>
                     <Paper shadow="xl" p="xl" withBorder>
-                        <Title order={3} align="center">Application Title: {applicationTitle}</Title>
-                        <Title order={4} align="center">Application ID: {id}</Title>
+                        <Title order={3} align="center">Title: {applicationTitle}</Title>
+                        <Title order={4} align="center">ID: {id}</Title>
                         <form onSubmit={applicationForm}>
                             <Textarea
-                                placeholder="Optional comments visible to student only"
+                                placeholder="Optional comments from supervisor"
                                 label="Supervisor Comments"
                                 description="Comments are only visible to you and will not be submitted in the application"
                                 value={supervisor_comment}
@@ -200,16 +200,6 @@ const supervisorDenied = () => {
                                 minRows={2}
                             />
                             <br />
-                            <Text>Attachments</Text>
-                            <Text>{documents.map((document) => {
-                                return (
-                                    <div className='attachment'>
-                                        <Link href={CDNURL + id + "/" + document.name} download> {document?.name} <br></br> </Link>
-                                        <img style={{ width: 22, height: 20 }} onClick={() => deleteFile(document)} src={"https://zanqrgclfkvzbsbmkpdt.supabase.co/storage/v1/object/public/images/trash-var-solid.png"} />
-                                    </div>
-                                )
-                            })}</Text>
-                            <br></br>
                             <TextInput
                                 label="Student Name"
                                 radius="md"
@@ -375,6 +365,17 @@ const supervisorDenied = () => {
                                 minRows={2}
                                 onChange={(e) => setRisk(e.target.value)}
                             />
+                            <br></br>
+                            <Text>Documents</Text>
+                            <Text fz="sm">{documents.map((document) => {
+                                return (
+                                    <div className='attachment'>
+                                        <Link href={CDNURL + id + "/" + document.name} download> {document?.name} <br></br> </Link>
+                                        <img style={{ width: 22, height: 20 }} onClick={() => deleteFile(document)} src={"https://zanqrgclfkvzbsbmkpdt.supabase.co/storage/v1/object/public/images/trash-var-solid.png"} />
+                                    </div>
+                                )
+                            })}</Text>
+                            <br></br>
                             <FileInput
                                 placeholder="Select File"
                                 label="Upload Documents"
@@ -398,6 +399,7 @@ const supervisorDenied = () => {
                                 accept='.docx'
                                 onChange={(e) => uploadFile(e)}
                             />
+                            <br></br>
                             <Textarea
                                 placeholder="E.g. Questionnaire link"
                                 label="Additional Comments"

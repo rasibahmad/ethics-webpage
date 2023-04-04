@@ -124,8 +124,8 @@ const completeApp = () => {
       <Grid gutter="lg" justify="center">
         <Grid.Col span={8}>
           <Paper shadow="xl" p="xl" withBorder>
-            <Title order={3} align="center">Application Title: {applicationTitle}</Title>
-            <Title order={4} align="center">Application ID: {id}</Title>
+            <Title order={3} align="center">Title: {applicationTitle}</Title>
+            <Title order={4} align="center">ID: {id}</Title>
             <form onSubmit={applicationForm}>
               <TextInput
                 label="Student Name"

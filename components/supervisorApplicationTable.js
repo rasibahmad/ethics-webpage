@@ -16,9 +16,21 @@ const SupervisorApplicationTable = ({ application }) => {
   
     return (
         <tr>
-            <td className={status === 'Supervisor Review' ? 'clickable' : ''} onClick={() => router.push(`/supervisor-review/${id}`)}>{student_name}</td>
-            <td className={status === 'Supervisor Review' ? 'clickable' : ''} onClick={() => router.push(`/supervisor-review/${id}`)}>{applicationTitle}</td>
-            <td>{id}</td>
+            {status === 'Supervisor Review' ? (
+                <td className='clickable' onClick={() => router.push(`/supervisor-review/${id}`)}>{student_name}</td>
+            ) : (
+                <td className='clickable' onClick={() => router.push(`/supervisor-view/${id}`)}>{student_name}</td>
+            )}
+            {status === 'Supervisor Review' ? (
+                <td className='clickable' onClick={() => router.push(`/supervisor-review/${id}`)}>{applicationTitle}</td>
+            ) : (
+                <td className='clickable' onClick={() => router.push(`/supervisor-view/${id}`)}>{applicationTitle}</td>
+            )}
+            {status === 'Supervisor Review' ? (
+                <td className='clickable' onClick={() => router.push(`/supervisor-review/${id}`)}>{id}</td>
+            ) : (
+                <td className='clickable' onClick={() => router.push(`/supervisor-view/${id}`)}>{id}</td>
+            )}
             <td>{formattedCreatedDate}</td>
             <td>{formattedUpdatedDate}</td>
             <td>{status}</td>

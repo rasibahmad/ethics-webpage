@@ -1,10 +1,10 @@
-import { Textarea, Group, Button, TextInput, Text, Checkbox, FileInput, Title, Paper, Grid } from '@mantine/core'
+import { Textarea, TextInput, FileInput, Text, Checkbox, Title, Paper, Grid, Select, Group, Button } from '@mantine/core'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { supabase } from '../../client'
 
-const supervisorApproved = () => {
+const ethicsTeamReview = () => {
     const router = useRouter()
     const { id } = router.query
     const [applicationTitle, setApplicationTitle] = useState('')
@@ -36,21 +36,24 @@ const supervisorApproved = () => {
     const [data_risk, setDataRisk] = useState(false)
     const [student_signature, setStudentSignature] = useState('')
     const [supervisor_signature, setSupervisorSignature] = useState('')
+    const [assigned_to, setAssignedTo] = useState('')
     const [documents, setDocuments] = useState([])
+    const [reviewer_comments, setReviewerComments] = useState('')
+    const disableSubmit = !student_email || !student_name || !student_number || !supervisor_name || !supervisor_email || !project_objectives || !study_objectives || !data_collection_method || !data_collected || !participant_recruitment || !data_storage || !data_evidence || !risk || !student_signature || !supervisor_signature || !reviewer_comments
     const CDNURL = "https://zanqrgclfkvzbsbmkpdt.supabase.co/storage/v1/object/public/documents/";
 
-    // submitting form
+    // submitting form - status: Approved
     const applicationForm = async (e) => {
         e.preventDefault()
 
-        if (!student_email || !student_name || !student_number || !supervisor_name || !supervisor_email || !project_objectives || !study_objectives || !data_collection_method || !data_collected || !participant_recruitment || !data_storage || !data_evidence || !risk || !student_signature) {
+        if (!student_email || !student_name || !student_number || !supervisor_name || !supervisor_email || !project_objectives || !study_objectives || !data_collection_method || !data_collected || !participant_recruitment || !data_storage || !data_evidence || !risk || !assigned_to) {
             setApplicationError('Please complete the application form')
             return
         }
 
         const { data, error } = await supabase
             .from('applications')
-            .update({ status: "Submitted" })
+            .update({ student_email, student_number, student_name, supervisor_name, supervisor_email, other_risk, project_objectives, study_objectives, data_collection_method, data_collected, participant_recruitment, data_storage, data_evidence, risk, comments, status: "Approved", student_signature, supervisor_signature, assigned_to, reviewer_comments })
             .eq('id', id)
             .select()
 
@@ -60,7 +63,7 @@ const supervisorApproved = () => {
 
         if (data) {
             setApplicationError(null)
-            router.push('/applications')
+            router.push('/ethics-team/applications')
         }
     }
 
@@ -74,7 +77,7 @@ const supervisorApproved = () => {
                 .single()
 
             if (error) {
-                router.push('/applications')
+                // router.push('/ethics-team/applications')
             }
 
             if (data) {
@@ -106,6 +109,7 @@ const supervisorApproved = () => {
                 setDataRisk(data.data_risk)
                 setStudentSignature(data.student_signature)
                 setSupervisorSignature(data.supervisor_signature)
+                setAssignedTo(data.assigned_to)
             }
         }
         fetchApplication()
@@ -130,6 +134,73 @@ const supervisorApproved = () => {
         retrieveFile()
     }, [id])
 
+    // uploading files function
+    async function uploadFile(files) {
+        const [file] = files
+
+        const { data, error } = await supabase
+            .storage
+            .from('documents')
+            .upload(id + "/" + file?.name, file);
+
+        if (error) {
+            console.log(error)
+        }
+
+        if (data) {
+            console.log(data)
+        }
+    }
+
+    // delete files from application
+    async function deleteFile({ name }) {
+        const { data, error } = await supabase
+            .storage
+            .from('documents')
+            .remove([id + '/' + name])
+
+        // refresh page and documents list
+        if (data) {
+            const { data, error } = await supabase
+                .storage
+                .from('documents')
+                .list(id)
+
+            if (error) {
+                console.log(error.message)
+            }
+            if (data) {
+                setDocuments(data)
+            }
+        }
+    }
+
+    // request applicant review/update application
+    async function requestChange() {
+        const { data, error } = await supabase
+            .from('applications')
+            .update({ student_email, student_number, student_name, supervisor_name, supervisor_email, other_risk, project_objectives, study_objectives, data_collection_method, data_collected, participant_recruitment, data_storage, data_evidence, risk, comments, status: "Applicant Review", student_signature, reviewer_comments })
+            .eq('id', id)
+            .select()
+
+        if (data) {
+            router.push('/ethics-team/applications')
+        }
+    }
+
+    // reject application
+    async function rejectApplication() {
+        const { data, error } = await supabase
+            .from('applications')
+            .update({ student_email, student_number, student_name, supervisor_name, supervisor_email, other_risk, project_objectives, study_objectives, data_collection_method, data_collected, participant_recruitment, data_storage, data_evidence, risk, comments, status: "Rejected", student_signature, reviewer_comments })
+            .eq('id', id)
+            .select()
+
+        if (data) {
+            router.push('/ethics-team/applications')
+        }
+    }
+
     return (
         <div className="application">
             <Grid gutter="lg" justify="center">
@@ -137,6 +208,16 @@ const supervisorApproved = () => {
                     <Paper shadow="xl" p="xl" withBorder>
                         <Title order={3} align="center">Title: {applicationTitle}</Title>
                         <Title order={4} align="center">ID: {id}</Title>
+                        <Select
+                            label="Assignee"
+                            placeholder="Select team member"
+                            searchable
+                            onSearchChange={setAssignedTo}
+                            searchValue={assigned_to}
+                            nothingFound="No options"
+                            data={['David', 'Steve', 'Bob']}
+                        />
+                        <br></br>
                         <form onSubmit={applicationForm}>
                             <TextInput
                                 label="Student Name"
@@ -290,16 +371,6 @@ const supervisorApproved = () => {
                                 autosize
                                 minRows={2}
                             />
-                            <br></br>
-                            <Text>Documents</Text>
-                            <Text fz="sm">{documents.map((document) => {
-                                return (
-                                    <div className='attachment'>
-                                        <Link href={CDNURL + id + "/" + document.name} download> {document?.name} <br></br> </Link>
-                                    </div>
-                                )
-                            })}</Text>
-                            <br></br>
                             <Textarea
                                 placeholder="E.g. Questionnaire link"
                                 label="Additional Comments"
@@ -307,6 +378,40 @@ const supervisorApproved = () => {
                                 value={comments}
                                 autosize
                                 minRows={2}
+                            />
+                            <br></br>
+                            <Text>Documents</Text>
+                            <Text fz="sm">{documents.map((document) => {
+                                return (
+                                    <div className='attachment'>
+                                        <Link href={CDNURL + id + "/" + document.name} download> {document?.name} <br></br> </Link>
+                                        <img style={{ width: 22, height: 20 }} onClick={() => deleteFile(document)} src={"https://zanqrgclfkvzbsbmkpdt.supabase.co/storage/v1/object/public/images/trash-var-solid.png"} />
+                                    </div>
+                                )
+                            })}</Text>
+                            <br></br>
+                            <FileInput
+                                placeholder="Select File"
+                                label="Attachments"
+                                description="Upload documents to application (.docx)"
+                                radius="md"
+                                multiple
+                                accept='.docx'
+                                onChange={(e) => uploadFile(e)}
+                            />
+                            <FileInput
+                                placeholder="Select File"
+                                radius="md"
+                                multiple
+                                accept='.docx'
+                                onChange={(e) => uploadFile(e)}
+                            />
+                            <FileInput
+                                placeholder="Select File"
+                                radius="md"
+                                multiple
+                                accept='.docx'
+                                onChange={(e) => uploadFile(e)}
                             />
                             <br></br>
                             <br></br>
@@ -330,10 +435,21 @@ const supervisorApproved = () => {
                             <Text fz="sm">• That I shall report to the person(s) granting ethical approval any breaches of approval and ensure that no data is included in the student’s work that has been collected in breach of approval.</Text>
                             <br></br>
                             <TextInput label="Supervisor Signature" placeholder="Print Name" withAsterisk radius="md" value={supervisor_signature} />
+                            <br></br>
+                            <br></br>
+                            <Textarea
+                                placeholder="Comments to applicant"
+                                label="Reviewer Comments"
+                                radius="md"
+                                autosize
+                                minRows={2}
+                                onChange={(e) => setReviewerComments(e.target.value)}
+                            />
                             <Group position="right" mt="md">
-                                <Button type="submit">Submit to Ethics Team</Button>
+                                <Button disabled={disableSubmit} type="submit">Approve</Button>
+                                <Button disabled={disableSubmit} onClick={() => requestChange()} color="yellow">Request Review</Button>
+                                <Button disabled={disableSubmit} onClick={() => rejectApplication()} color="red">Reject</Button>
                             </Group>
-                            {applicationError && <p className='error' style={{ color: "red" }}>{applicationError}</p>}
                         </form>
                     </Paper>
                 </Grid.Col>
@@ -342,4 +458,4 @@ const supervisorApproved = () => {
     )
 }
 
-export default supervisorApproved
+export default ethicsTeamReview

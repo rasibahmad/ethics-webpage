@@ -48,10 +48,10 @@ const supervisorReview = () => {
     const [supervisor_signature, setSupervisorSignature] = useState('')
     const [documents, setDocuments] = useState([])
     const [supervisor_comment, setSupervisorComment] = useState('')
-    const disableApprove = !student_email || !student_name || !student_number || !supervisor_name || !supervisor_email || !project_objectives || !study_objectives || !data_collection_method || !data_collected || !participant_recruitment || !data_storage || !data_evidence || !risk || !student_signature || !supervisor_signature
+    const disableApprove = !student_email || !student_name || !student_number || !supervisor_name || !supervisor_email || !project_objectives || !study_objectives || !data_collection_method || !data_collected || !participant_recruitment || !data_storage || !data_evidence || !risk || !student_signature || !supervisor_signature 
     const CDNURL = "https://zanqrgclfkvzbsbmkpdt.supabase.co/storage/v1/object/public/documents/";
 
-    // submitting form
+    // submitting form - status: Supervisor Approved
     const applicationForm = async (e) => {
         e.preventDefault()
 
@@ -104,7 +104,7 @@ const supervisorReview = () => {
                 .single()
 
             if (error) {
-                // router.push('/supervisors/applications')
+                router.push('/supervisors/applications')
             }
 
             if (data) {
@@ -183,6 +183,7 @@ const supervisorReview = () => {
         }
     }
 
+    // deny button - status = "Supervisor Denied"
     async function denyApplication() {
         const { data, error } = await supabase
             .from('applications')
@@ -195,25 +196,14 @@ const supervisorReview = () => {
         }
     }
 
-
     return (
         <div className="application">
             <Grid gutter="lg" justify="center">
                 <Grid.Col span={8}>
                     <Paper shadow="xl" p="xl" withBorder>
-                        <Title order={3} align="center">Application Title: {applicationTitle}</Title>
-                        <Title order={4} align="center">Application ID: {id}</Title>
+                        <Title order={3} align="center">Title: {applicationTitle}</Title>
+                        <Title order={4} align="center">ID: {id}</Title>
                         <form onSubmit={applicationForm}>
-                            <Text>Attachments</Text>
-                            <Text>{documents.map((document) => {
-                                return (
-                                    <div className='attachment'>
-                                        <Link href={CDNURL + id + "/" + document.name} download> {document?.name} <br></br> </Link>
-                                        <img style={{ width: 22, height: 20 }} onClick={() => deleteFile(document)} src={"https://zanqrgclfkvzbsbmkpdt.supabase.co/storage/v1/object/public/images/trash-var-solid.png"} />
-                                    </div>
-                                )
-                            })}</Text>
-                            <br></br>
                             <TextInput
                                 label="Student Name"
                                 radius="md"
@@ -379,6 +369,26 @@ const supervisorReview = () => {
                                 minRows={2}
                                 onChange={(e) => setRisk(e.target.value)}
                             />
+                            <Textarea
+                                placeholder="E.g. Questionnaire link"
+                                label="Additional Comments"
+                                radius="md"
+                                value={comments}
+                                autosize
+                                minRows={2}
+                                onChange={(e) => setComments(e.target.value)}
+                            />
+                            <br></br>
+                            <Text>Documents</Text>
+                            <Text fz="sm">{documents.map((document) => {
+                                return (
+                                    <div className='attachment'>
+                                        <Link href={CDNURL + id + "/" + document.name} download> {document?.name} <br></br> </Link>
+                                        <img style={{ width: 22, height: 20 }} onClick={() => deleteFile(document)} src={"https://zanqrgclfkvzbsbmkpdt.supabase.co/storage/v1/object/public/images/trash-var-solid.png"} />
+                                    </div>
+                                )
+                            })}</Text>
+                            <br></br>
                             <FileInput
                                 placeholder="Select File"
                                 label="Attachments"
@@ -402,15 +412,7 @@ const supervisorReview = () => {
                                 accept='.docx'
                                 onChange={(e) => uploadFile(e)}
                             />
-                            <Textarea
-                                placeholder="E.g. Questionnaire link"
-                                label="Additional Comments"
-                                radius="md"
-                                value={comments}
-                                autosize
-                                minRows={2}
-                                onChange={(e) => setComments(e.target.value)}
-                            />
+                            <br></br>
                             <Textarea
                                 placeholder="Optional comments visible to student only"
                                 label="Supervisor Comments"

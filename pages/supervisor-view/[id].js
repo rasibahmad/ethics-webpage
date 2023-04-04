@@ -48,7 +48,7 @@ const supervisorView = () => {
                 .single()
 
             if (error) {
-                // router.push('/applications')
+                router.push('/supervisors/applications')
             }
 
             if (data) {
@@ -109,17 +109,8 @@ const supervisorView = () => {
             <Grid gutter="lg" justify="center">
                 <Grid.Col span={8}>
                     <Paper shadow="xl" p="xl" withBorder>
-                        <Title order={3} align="center">Application Title: {applicationTitle}</Title>
-                        <Title order={4} align="center">Application ID: {id}</Title>
-                        <Text>Attachments</Text>
-                        <Text>{documents.map((document) => {
-                            return (
-                                <div className='attachment'>
-                                    <Link href={CDNURL + id + "/" + document.name} download> {document?.name} <br></br> </Link>
-                                </div>
-                            )
-                        })}</Text>
-                        <br></br>
+                        <Title order={3} align="center">Title: {applicationTitle}</Title>
+                        <Title order={4} align="center">ID: {id}</Title>
                         <TextInput
                             label="Student Name"
                             radius="md"
@@ -280,6 +271,15 @@ const supervisorView = () => {
                             autosize
                             minRows={2}
                         />
+                        <br></br>
+                        <Text>Documents</Text>
+                        <Text fz="sm">{documents.map((document) => {
+                            return (
+                                <div className='attachment'>
+                                    <Link href={CDNURL + id + "/" + document.name} download> {document?.name} <br></br> </Link>
+                                </div>
+                            )
+                        })}</Text>
                         <br></br>
                         <br></br>
                         <Title order={3}>Declaration</Title>

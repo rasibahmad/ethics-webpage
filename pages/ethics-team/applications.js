@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Paper, Table, Title, Grid } from '@mantine/core';
 import { supabase } from '../../client';
-import SupervisorApplicationTable from '../../components/supervisorApplicationTable';
+import EthicsTeamApplicationTable from '../../components/ethicsTeamApplicationTable';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { useUser } from '@supabase/auth-helpers-react';
 
-export default function supervisorApplications() {
+export default function ethicsTeamApplications() {
     const [fetchError, setFetchError] = useState(null)
     const [applicationsList, setApplicationsList] = useState([])
     const user = useUser();
@@ -15,9 +15,7 @@ export default function supervisorApplications() {
             const { data, error } = await supabase
                 .from('applications')
                 .select()
-                // only shows applications assigned to supervisor with Status: 'Submitted', 'Supervisor Approved', 'Supervisor Review'
-                .eq('supervisor_email', user.email)
-                .or('status.eq.Supervisor Approved,status.eq.Submitted,status.eq.Supervisor Review')
+                .eq('status', 'Submitted')
 
             if (error) {
                 setFetchError('No Applications Found')
@@ -48,6 +46,7 @@ export default function supervisorApplications() {
                                 <th>ID</th>
                                 <th>Created Date</th>
                                 <th>Last Updated</th>
+                                <th>Assigned to</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -56,7 +55,7 @@ export default function supervisorApplications() {
                         <tbody>
                             {applicationsList && (
                                 applicationsList.map(application => (
-                                    <SupervisorApplicationTable key={application.id} application={application} />
+                                    <EthicsTeamApplicationTable key={application.id} application={application} />
                                 ))
                             )}
                         </tbody>
