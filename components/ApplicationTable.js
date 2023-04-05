@@ -43,7 +43,7 @@ const ApplicationTable = ({ application }) => {
             .update({ status: "Submitted" })
             .eq('id', id)
             .select()
-        
+
         if (data) {
             router.push('/applications')
         }
@@ -57,6 +57,8 @@ const ApplicationTable = ({ application }) => {
                 <td className='clickable' onClick={() => router.push(`/supervisor-denied/${id}`)}>{applicationTitle}</td>
             ) : status === 'Supervisor Approved' ? (
                 <td className='clickable' onClick={() => router.push(`/supervisor-approved/${id}`)}>{applicationTitle}</td>
+            ) : status === "Approved" ? (
+                <td className='clickable' onClick={() => router.push(`/approved/${id}`)}>{applicationTitle}</td>
             ) : (
                 <td>{applicationTitle}</td>
             )}
@@ -66,6 +68,8 @@ const ApplicationTable = ({ application }) => {
                 <td className='clickable' onClick={() => router.push(`/supervisor-denied/${id}`)}>{id}</td>
             ) : status === 'Supervisor Approved' ? (
                 <td className='clickable' onClick={() => router.push(`/supervisor-approved/${id}`)}>{id}</td>
+            ) : status === "Approved" ? (
+                <td className='clickable' onClick={() => router.push(`/approved/${id}`)}>{id}</td>
             ) : (
                 <td>{id}</td>
             )}
@@ -84,6 +88,8 @@ const ApplicationTable = ({ application }) => {
                 <td><Button onClick={() => submitApproved()}>Submit</Button></td>
             ) : status === "Supervisor Denied" ? (
                 <td><Button onClick={() => router.push(`/supervisor-denied/${id}`)}>Edit</Button></td>
+            ) : status === "Approved" ? (
+                <td><Button onClick={() => router.push(`/approved/${id}`)}>View</Button></td>
             ) : (
                 <td></td>
             )}

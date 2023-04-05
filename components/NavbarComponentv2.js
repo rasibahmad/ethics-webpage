@@ -1,9 +1,10 @@
-import { AppBar, Container, Link, Button } from "@mantine/core" 
+import { AppBar, Header, Container, Link, Button } from "@mantine/core" 
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import React from "react";
 
-function NavbarComponentv2() {
+const NavbarComponentv2 = () => {
     const supabase = useSupabaseClient();
     const user = useUser();
     const router = useRouter();
@@ -29,14 +30,14 @@ function NavbarComponentv2() {
     }, [])
 
     return (
-        <AppBar>
+        <Header>
             <Container>
                 <Link href="/">Home</Link>
                 <Link href="/applications">Applications</Link>
                 <Link href="/FAQ">FAQ</Link>
                 <Button onClick={() => signOutUser()}>Sign Out</Button>
             </Container>
-        </AppBar>
+        </Header>
     )
 }
 

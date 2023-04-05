@@ -6,6 +6,7 @@ import { SessionContextProvider, Session, useSession } from '@supabase/auth-help
 import { AppProps } from 'next/app'
 import { useState } from 'react'
 import Navbar from '../components/NavbarComponent'
+import NavbarComponentv2 from '@/components/NavbarComponentv2'
 import '../styles/form.css'
 
 export default function MyApp({

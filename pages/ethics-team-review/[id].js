@@ -179,7 +179,7 @@ const ethicsTeamReview = () => {
     async function requestChange() {
         const { data, error } = await supabase
             .from('applications')
-            .update({ student_email, student_number, student_name, supervisor_name, supervisor_email, other_risk, project_objectives, study_objectives, data_collection_method, data_collected, participant_recruitment, data_storage, data_evidence, risk, comments, status: "Applicant Review", student_signature, reviewer_comments })
+            .update({ student_email, student_number, student_name, supervisor_name, supervisor_email, other_risk, project_objectives, study_objectives, data_collection_method, data_collected, participant_recruitment, data_storage, data_evidence, risk, comments, status: "On Hold", student_signature, reviewer_comments })
             .eq('id', id)
             .select()
 
@@ -447,9 +447,10 @@ const ethicsTeamReview = () => {
                             />
                             <Group position="right" mt="md">
                                 <Button disabled={disableSubmit} type="submit">Approve</Button>
-                                <Button disabled={disableSubmit} onClick={() => requestChange()} color="yellow">Request Review</Button>
+                                <Button disabled={disableSubmit} onClick={() => requestChange()} color="yellow">Request Change</Button>
                                 <Button disabled={disableSubmit} onClick={() => rejectApplication()} color="red">Reject</Button>
                             </Group>
+                            {applicationError && <p className='error' style={{ color: "red" }}>{applicationError}</p>}
                         </form>
                     </Paper>
                 </Grid.Col>
