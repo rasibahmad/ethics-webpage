@@ -1,4 +1,6 @@
 import { Textarea, Box, Button, Group, Paper, Table, Grid, Title } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
+import { IconCheck } from '@tabler/icons-react';
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../client';
 import ApplicationTable from '../components/ApplicationTable';
@@ -35,6 +37,19 @@ export default function Application() {
                 .from('applications')
                 .update({ user_id: user.id })
                 .eq('id', data[0].id)
+
+            // adds new application record/updates track application table
+            const fetchApplications = async () => {
+                const { data } = await supabase
+                    .from('applications')
+                    .select()
+                    .eq('user_id', user.id)
+
+                if (data) {
+                    setApplicationsList(data)
+                }
+            }
+            fetchApplications()
         }
     }
 
@@ -94,6 +109,23 @@ export default function Application() {
         fetchApplications()
     }, [])
 
+    const refreshApplications = async () => {
+        const { data, error } = await supabase
+            .from('applications')
+            .select()
+            .eq('user_id', user.id)
+
+        if (error) {
+            setFetchError('No Applications Found')
+            setApplicationsList(null)
+            console.log(error)
+        }
+
+        if (data) {
+            setApplicationsList(data)
+            setFetchError(null)
+        }
+    }
 
     return (
         <Grid gutter="lg" justify="center">
@@ -112,7 +144,19 @@ export default function Application() {
                                     onChange={(e) => setApplicationTitle(e.target.value)}
                                 />
                                 <Group position="right" mt="md">
-                                    <Button type="submit">Create</Button>
+                                    <Button
+                                        type="submit"
+                                        onClick={() =>
+                                            notifications.show({
+                                                title: 'Success Application Created!',
+                                                message: 'Application can be viewed in the Track Applications table',
+                                                autoClose: 10000,
+                                                icon: <IconCheck />,
+                                                color: 'teal',
+                                            })
+                                        }>
+                                        Create
+                                    </Button>
                                 </Group>
                                 {applicationError && <p className='error' style={{ color: "red" }}>{applicationError}</p>}
                             </Box>
@@ -156,14 +200,14 @@ export default function Application() {
                                     <th>Created Date</th>
                                     <th>Last Updated</th>
                                     <th>Status</th>
-                                    <th>Action</th>
+                                    <th onClick={() => refreshApplications()}>Action</th>
                                 </tr>
                             </thead>
                             {fetchError && <p className='error' style={{ color: "red" }}>{fetchError}</p>}
                             <tbody>
                                 {applicationsList && (
                                     applicationsList.map(application => (
-                                        <ApplicationTable key={application.id} application={application} />
+                                        <ApplicationTable key={application.id} application={application} refreshApplications={refreshApplications}/>
                                     ))
                                 )}
                             </tbody>

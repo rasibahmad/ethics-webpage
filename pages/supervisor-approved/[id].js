@@ -1,4 +1,6 @@
-import { Textarea, Group, Button, TextInput, Text, Checkbox, FileInput, Title, Paper, Grid } from '@mantine/core'
+import { Textarea, Group, Button, TextInput, Text, Checkbox, Title, Paper, Grid } from '@mantine/core'
+import { notifications } from '@mantine/notifications'
+import { IconCheck } from '@tabler/icons-react';
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -331,7 +333,7 @@ const supervisorApproved = () => {
                             <br></br>
                             <TextInput label="Supervisor Signature" placeholder="Print Name" withAsterisk radius="md" value={supervisor_signature} />
                             <Group position="right" mt="md">
-                                <Button type="submit">Submit to Ethics Team</Button>
+                                <Button type="submit" onClick={() => notifications.show({title: 'Application Submitted!', message: 'Ethics team will review your application', autoClose: 10000, icon: <IconCheck />, color: 'teal'})}>Submit to Ethics Team</Button>
                             </Group>
                             {applicationError && <p className='error' style={{ color: "red" }}>{applicationError}</p>}
                         </form>

@@ -1,4 +1,6 @@
 import { Textarea, TextInput, FileInput, Text, Checkbox, Title, Paper, Grid, Select, Group, Button } from '@mantine/core'
+import { notifications } from '@mantine/notifications'
+import { IconCheck } from '@tabler/icons-react';
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -446,9 +448,9 @@ const ethicsTeamReview = () => {
                                 onChange={(e) => setReviewerComments(e.target.value)}
                             />
                             <Group position="right" mt="md">
-                                <Button disabled={disableSubmit} type="submit">Approve</Button>
-                                <Button disabled={disableSubmit} onClick={() => requestChange()} color="yellow">Request Change</Button>
-                                <Button disabled={disableSubmit} onClick={() => rejectApplication()} color="red">Reject</Button>
+                                <Button disabled={disableSubmit} type="submit" onClick={() => notifications.show({title: 'Application Approved!', message: 'Student can begin their study', autoClose: 10000, icon: <IconCheck />, color: 'teal'})}>Approve</Button>
+                                <Button disabled={disableSubmit} onClick={() => {requestChange(); notifications.show({title: 'Application On Hold', message: 'Student able to review and update application', autoClose: 10000, icon: <IconCheck />})}} color="yellow">Request Change</Button>
+                                <Button disabled={disableSubmit} onClick={() => {rejectApplication(); notifications.show({title: 'Application Rejected', message: 'Student application denied', autoClose: 10000, icon: <IconCheck />})}} color="red">Reject</Button>
                             </Group>
                             {applicationError && <p className='error' style={{ color: "red" }}>{applicationError}</p>}
                         </form>

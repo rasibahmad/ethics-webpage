@@ -1,8 +1,11 @@
 import { Button } from '@mantine/core'
+import React from 'react';
 import { useRouter } from 'next/router'
 import { supabase } from '../client';
+import { notifications } from '@mantine/notifications';
+import { IconCheck } from '@tabler/icons-react';
 
-const ApplicationTable = ({ application }) => {
+const ApplicationTable = ({ application, refreshApplications }) => {
     const { id, applicationTitle, created_at, updated_at, status } = application
     const router = useRouter()
 
@@ -84,12 +87,12 @@ const ApplicationTable = ({ application }) => {
             {status === "Not Submitted" ? (
                 <td>
                     <Button onClick={() => router.push(`/complete-application/${id}`)}>Edit</Button>
-                    <Button color="red" onClick={() => deleteApplication()}>Delete</Button>
+                    <Button color="red" onClick={() => {deleteApplication(); refreshApplications ;notifications.show({title: 'Application Deleted', message: 'Record has been removed from your account', autoClose: 10000, icon: <IconCheck />})}}>Delete</Button>
                 </td>
             ) : status === "Supervisor Review" ? (
-                <td><Button color="orange" onClick={() => updateStatus()}>Cancel</Button></td>
+                <td><Button color="orange" onClick={() => {updateStatus(); notifications.show({title: 'Supervisor Review Cancelled', message: 'Application status updated to "Not Submitted"', autoClose: 10000, icon: <IconCheck />})}}>Cancel</Button></td>
             ) : status === "Supervisor Approved" ? (
-                <td><Button onClick={() => submitApproved()}>Submit</Button></td>
+                <td><Button onClick={() => {submitApproved(); notifications.show({title: 'Application Submitted!', message: 'Ethics team will review your application', autoClose: 10000, icon: <IconCheck />, color: 'teal'})}}>Submit</Button></td>
             ) : status === "Supervisor Denied" ? (
                 <td><Button onClick={() => router.push(`/supervisor-denied/${id}`)}>Edit</Button></td>
             ) : status === "Approved" ? (

@@ -1,4 +1,5 @@
 import { MantineProvider, Box } from '@mantine/core'
+import { Notifications } from '@mantine/notifications';
 import { NextUIProvider, useSSR } from '@nextui-org/react'
 import { SSRProvider } from '@react-aria/ssr'
 import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs'
@@ -38,6 +39,8 @@ export default function MyApp({
             },
           })}
         >
+          {/* Notifications: position='top-center' */}
+          <Notifications />
           <Component {...pageProps} />
         </Box>
       </MantineProvider>

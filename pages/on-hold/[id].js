@@ -1,4 +1,6 @@
 import { Textarea, Group, Button, TextInput, Text, Checkbox, FileInput, Title, Paper, Grid } from '@mantine/core'
+import { notifications } from '@mantine/notifications'
+import { IconCheck } from '@tabler/icons-react';
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -417,7 +419,7 @@ const onHold = () => {
                             <TextInput label="Student Signature" value={student_signature} placeholder="Print Name" withAsterisk radius="md" />
                             <TextInput label="Supervisor Signature" value={supervisor_signature} placeholder="Print Name" withAsterisk radius="md" />
                             <Group position="right" mt="md">
-                                <Button disabled={disableSubmit} type="submit">Submit to Ethics Team</Button>
+                                <Button disabled={disableSubmit} type="submit" onClick={() => notifications.show({title: 'Application Submitted!', message: 'Ethics team will review your application', autoClose: 10000, icon: <IconCheck />, color: 'teal'})}>Submit to Ethics Team</Button>
                             </Group>
                             {applicationError && <p className='error' style={{ color: "red" }}>{applicationError}</p>}
                         </form>

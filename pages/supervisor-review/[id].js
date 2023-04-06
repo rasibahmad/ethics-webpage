@@ -1,4 +1,6 @@
 import { Textarea, Group, Button, TextInput, Text, Checkbox, FileInput, Title, Paper, Grid } from '@mantine/core'
+import { notifications } from '@mantine/notifications'
+import { IconCheck } from '@tabler/icons-react';
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -435,8 +437,8 @@ const supervisorReview = () => {
                             <br></br>
                             <TextInput label="Supervisor Signature" placeholder="Print Name" withAsterisk radius="md" value={supervisor_signature} onChange={(e) => setSupervisorSignature(e.target.value)} />
                             <Group position="right" mt="md">
-                                <Button disabled={disableApprove} type="submit">Approve</Button>
-                                <Button onClick={() => denyApplication()} color="red">Deny</Button>
+                                <Button disabled={disableApprove} onClick={() => notifications.show({title: 'Application Approved', message: 'Student is able to submit application to ethics team for review', autoClose: 10000, icon: <IconCheck />, color: 'teal'})} type="submit">Approve</Button>
+                                <Button onClick={() => {denyApplication(); notifications.show({title: 'Application Denied', message: 'Student will be able to make changes and re-submit', autoClose: 10000, icon: <IconCheck />})}} color="red">Deny</Button>
                             </Group>
                             {applicationError && <p className='error' style={{ color: "red" }}>{applicationError}</p>}
                         </form>
