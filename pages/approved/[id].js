@@ -8,7 +8,6 @@ const studyApproved = () => {
     const router = useRouter()
     const { id } = router.query
     const [applicationTitle, setApplicationTitle] = useState('')
-    const [applicationError, setApplicationError] = useState(null)
     const [student_name, setStudentName] = useState('')
     const [student_number, setStudentNumber] = useState('')
     const [student_email, setStudentEmail] = useState('')
@@ -315,7 +314,6 @@ const studyApproved = () => {
                         <Text fz="sm">• That I shall report to the person(s) granting ethical approval any breaches of approval and ensure that no data is included in the student’s work that has been collected in breach of approval.</Text>
                         <br></br>
                         <TextInput label="Supervisor Signature" placeholder="Print Name" withAsterisk radius="md" value={supervisor_signature} />
-                        {applicationError && <p className='error' style={{ color: "red" }}>{applicationError}</p>}
                     </Paper>
                 </Grid.Col>
             </Grid>

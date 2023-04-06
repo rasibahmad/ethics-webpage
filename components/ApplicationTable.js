@@ -59,6 +59,8 @@ const ApplicationTable = ({ application }) => {
                 <td className='clickable' onClick={() => router.push(`/supervisor-approved/${id}`)}>{applicationTitle}</td>
             ) : status === "Approved" ? (
                 <td className='clickable' onClick={() => router.push(`/approved/${id}`)}>{applicationTitle}</td>
+            ) : status === "On Hold" ? (
+                <td className='clickable' onClick={() => router.push(`/on-hold/${id}`)}>{applicationTitle}</td>
             ) : (
                 <td>{applicationTitle}</td>
             )}
@@ -70,6 +72,8 @@ const ApplicationTable = ({ application }) => {
                 <td className='clickable' onClick={() => router.push(`/supervisor-approved/${id}`)}>{id}</td>
             ) : status === "Approved" ? (
                 <td className='clickable' onClick={() => router.push(`/approved/${id}`)}>{id}</td>
+            ) : status === "On Hold" ? (
+                <td className='clickable' onClick={() => router.push(`/on-hold/${id}`)}>{id}</td>
             ) : (
                 <td>{id}</td>
             )}
@@ -90,6 +94,8 @@ const ApplicationTable = ({ application }) => {
                 <td><Button onClick={() => router.push(`/supervisor-denied/${id}`)}>Edit</Button></td>
             ) : status === "Approved" ? (
                 <td><Button onClick={() => router.push(`/approved/${id}`)}>View</Button></td>
+            ) : status === "On Hold" ? (
+                <td><Button onClick={() => router.push(`/on-hold/${id}`)}>Edit</Button></td>
             ) : (
                 <td></td>
             )}

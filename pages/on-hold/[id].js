@@ -1,10 +1,10 @@
-import { Textarea, TextInput, FileInput, Text, Checkbox, Title, Paper, Grid, Select, Group, Button } from '@mantine/core'
+import { Textarea, Group, Button, TextInput, Text, Checkbox, FileInput, Title, Paper, Grid } from '@mantine/core'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { supabase } from '../../client'
 
-const ethicsTeamReview = () => {
+const onHold = () => {
     const router = useRouter()
     const { id } = router.query
     const [applicationTitle, setApplicationTitle] = useState('')
@@ -23,37 +23,46 @@ const ethicsTeamReview = () => {
     const [comments, setComments] = useState('')
     const [supervisor_name, setSupervisorName] = useState('')
     const [supervisor_email, setSupervisorEmail] = useState('')
+    const [checked, setChecked] = useState(false)
     const [human_participants, setHumanParticipants] = useState(false)
+    const [isHumanParticipantsChecked, setIsHumanParticipantsChecked] = useState(false)
     const [testing_apparatus, setTestingApparatus] = useState(false)
+    const [isTestingApparatusChecked, setIsTestingApparatusChecked] = useState(false)
     const [lone_working, setLoneWorking] = useState(false)
+    const [isLoneWorkingChecked, setIsLoneWorkingChecked] = useState(false)
     const [travel_risk, setTravelRisk] = useState(false)
+    const [isTravelRiskChecked, setIsTravelRiskChecked] = useState(false)
     const [emotional_risk, setEmotionalRisk] = useState(false)
+    const [isEmotionalRiskChecked, setIsEmotionalRiskChecked] = useState(false)
     const [other_risk, setOtherRisk] = useState('')
     const [other_personal_risk, setOtherPersonalRisk] = useState('')
     const [environment_risk, setEnvironmentRisk] = useState(false)
+    const [isEnvironmentRiskChecked, setIsEnvironmentRiskChecked] = useState(false)
     const [conflict_interest, setConflictInterest] = useState(false)
+    const [isConflictInterestChecked, setIsConflictInterestChecked] = useState(false)
     const [controversial_work, setControverisalWork] = useState(false)
+    const [isControversialChecked, setIsControversialChecked] = useState(false)
     const [data_risk, setDataRisk] = useState(false)
+    const [isDataRiskChecked, setIsDataRiskChecked] = useState(false)
     const [student_signature, setStudentSignature] = useState('')
     const [supervisor_signature, setSupervisorSignature] = useState('')
-    const [assigned_to, setAssignedTo] = useState('')
     const [documents, setDocuments] = useState([])
     const [reviewer_comments, setReviewerComments] = useState('')
-    const disableSubmit = !student_email || !student_name || !student_number || !supervisor_name || !supervisor_email || !project_objectives || !study_objectives || !data_collection_method || !data_collected || !participant_recruitment || !data_storage || !data_evidence || !risk || !student_signature || !supervisor_signature || !reviewer_comments
     const CDNURL = "https://zanqrgclfkvzbsbmkpdt.supabase.co/storage/v1/object/public/documents/";
+    const disableSubmit = !student_email || !student_name || !student_number || !supervisor_name || !supervisor_email || !project_objectives || !study_objectives || !data_collection_method || !data_collected || !participant_recruitment || !data_storage || !data_evidence || !risk
 
-    // submitting form - status: Approved
+    // submitting form
     const applicationForm = async (e) => {
         e.preventDefault()
 
-        if (!student_email || !student_name || !student_number || !supervisor_name || !supervisor_email || !project_objectives || !study_objectives || !data_collection_method || !data_collected || !participant_recruitment || !data_storage || !data_evidence || !risk || !assigned_to) {
+        if (!student_email || !student_name || !student_number || !supervisor_name || !supervisor_email || !project_objectives || !study_objectives || !data_collection_method || !data_collected || !participant_recruitment || !data_storage || !data_evidence || !risk) {
             setApplicationError('Please complete the application form')
             return
         }
 
         const { data, error } = await supabase
             .from('applications')
-            .update({ student_email, student_number, student_name, supervisor_name, supervisor_email, other_risk, project_objectives, study_objectives, data_collection_method, data_collected, participant_recruitment, data_storage, data_evidence, risk, comments, status: "Approved", student_signature, supervisor_signature, assigned_to, reviewer_comments })
+            .update({ student_email, student_number, student_name, supervisor_name, supervisor_email, other_risk, project_objectives, study_objectives, data_collection_method, data_collected, participant_recruitment, data_storage, data_evidence, risk, comments, status: "Submitted" })
             .eq('id', id)
             .select()
 
@@ -63,7 +72,25 @@ const ethicsTeamReview = () => {
 
         if (data) {
             setApplicationError(null)
-            router.push('/ethics-team/applications')
+            router.push('/applications')
+        }
+    }
+
+    // uploading files function
+    async function uploadFile(files) {
+        const [file] = files
+
+        const { data, error } = await supabase
+            .storage
+            .from('documents')
+            .upload(id + "/" + file?.name, file);
+
+        if (error) {
+            console.log(error)
+        }
+
+        if (data) {
+            console.log(data)
         }
     }
 
@@ -77,7 +104,7 @@ const ethicsTeamReview = () => {
                 .single()
 
             if (error) {
-                // router.push('/ethics-team/applications')
+                router.push('/applications')
             }
 
             if (data) {
@@ -109,7 +136,7 @@ const ethicsTeamReview = () => {
                 setDataRisk(data.data_risk)
                 setStudentSignature(data.student_signature)
                 setSupervisorSignature(data.supervisor_signature)
-                setAssignedTo(data.assigned_to)
+                setReviewerComments(data.reviewer_comments)
             }
         }
         fetchApplication()
@@ -134,24 +161,6 @@ const ethicsTeamReview = () => {
         retrieveFile()
     }, [id])
 
-    // uploading files function
-    async function uploadFile(files) {
-        const [file] = files
-
-        const { data, error } = await supabase
-            .storage
-            .from('documents')
-            .upload(id + "/" + file?.name, file);
-
-        if (error) {
-            console.log(error)
-        }
-
-        if (data) {
-            console.log(data)
-        }
-    }
-
     // delete files from application
     async function deleteFile({ name }) {
         const { data, error } = await supabase
@@ -175,32 +184,6 @@ const ethicsTeamReview = () => {
         }
     }
 
-    // request applicant review/update application
-    async function requestChange() {
-        const { data, error } = await supabase
-            .from('applications')
-            .update({ student_email, student_number, student_name, supervisor_name, supervisor_email, other_risk, project_objectives, study_objectives, data_collection_method, data_collected, participant_recruitment, data_storage, data_evidence, risk, comments, status: "On Hold", student_signature, reviewer_comments })
-            .eq('id', id)
-            .select()
-
-        if (data) {
-            router.push('/ethics-team/applications')
-        }
-    }
-
-    // reject application
-    async function rejectApplication() {
-        const { data, error } = await supabase
-            .from('applications')
-            .update({ student_email, student_number, student_name, supervisor_name, supervisor_email, other_risk, project_objectives, study_objectives, data_collection_method, data_collected, participant_recruitment, data_storage, data_evidence, risk, comments, status: "Rejected", student_signature, reviewer_comments })
-            .eq('id', id)
-            .select()
-
-        if (data) {
-            router.push('/ethics-team/applications')
-        }
-    }
-
     return (
         <div className="application">
             <Grid gutter="lg" justify="center">
@@ -208,28 +191,29 @@ const ethicsTeamReview = () => {
                     <Paper shadow="xl" p="xl" withBorder>
                         <Title order={3} align="center">Title: {applicationTitle}</Title>
                         <Title order={4} align="center">ID: {id}</Title>
-                        <Select
-                            label="Assignee"
-                            placeholder="Select team member"
-                            searchable
-                            onSearchChange={setAssignedTo}
-                            searchValue={assigned_to}
-                            nothingFound="No options"
-                            data={['Evaluator 1', 'Evaluator 2', 'Evaluator 3']}
-                        />
-                        <br></br>
                         <form onSubmit={applicationForm}>
+                            <Textarea
+                                placeholder="Comments to applicant"
+                                label="Reviewer Comments"
+                                radius="md"
+                                autosize
+                                minRows={2}
+                                value={reviewer_comments}
+                            />
+                            <br></br>
                             <TextInput
                                 label="Student Name"
                                 radius="md"
                                 withAsterisk
                                 value={student_name}
+                                onChange={(e) => setStudentName(e.target.value)}
                             />
                             <TextInput
                                 label="Student Email"
                                 radius="md"
                                 withAsterisk
                                 value={student_email}
+                                onChange={(e) => setStudentEmail(e.target.value)}
                             />
                             <TextInput
                                 label="Student Number"
@@ -237,18 +221,21 @@ const ethicsTeamReview = () => {
                                 radius="md"
                                 withAsterisk
                                 value={student_number}
+                                onChange={(e) => setStudentNumber(e.target.value)}
                             />
                             <TextInput
                                 label="Supervisor Full Name"
                                 radius="md"
                                 withAsterisk
                                 value={supervisor_name}
+                                onChange={(e) => setSupervisorName(e.target.value)}
                             />
                             <TextInput
                                 label="Supervisor Email"
                                 radius="md"
                                 withAsterisk
                                 value={supervisor_email}
+                                onChange={(e) => setSupervisorEmail(e.target.value)}
                             />
                             <br></br>
                             <br></br>
@@ -278,21 +265,21 @@ const ethicsTeamReview = () => {
                             <br></br>
                             <Title order={4}>Please tick the following boxes if your project will involve any of the following:</Title>
                             <br></br>
-                            <Checkbox label="Human Participants" checked={human_participants} description="(including all types of interviews, questionnaires, focus groups, records relating to humans, use of online datasets or other secondary data, observations, usability testing, etc.)" />
-                            <Checkbox label="Testing Apparatus" checked={testing_apparatus} description="(including where you have developed new apparatus and are testing it for accuracy, including on yourself)" />
+                            <Checkbox label="Human Participants" checked={human_participants} description="(including all types of interviews, questionnaires, focus groups, records relating to humans, use of online datasets or other secondary data, observations, usability testing, etc.)" onChange={(e) => setIsHumanParticipantsChecked(e.currentTarget.checked)} />
+                            <Checkbox label="Testing Apparatus" checked={testing_apparatus} description="(including where you have developed new apparatus and are testing it for accuracy, including on yourself)" onChange={(e) => setIsTestingApparatusChecked(e.currentTarget.checked)} />
                             <br></br>
                             <Title order={4}>Risk to you, including:</Title>
-                            <Checkbox label="Lone working during data collection" checked={lone_working} />
-                            <Checkbox label="Travel to areas where you may be at risk" checked={travel_risk} />
-                            <Checkbox label="Risk of emotional distress" checked={emotional_risk} />
-                            <Textarea label="Other: please outline" value={other_personal_risk} radius="md" autosize minRows={2} />
+                            <Checkbox label="Lone working during data collection" checked={lone_working} onChange={(e) => setIsLoneWorkingChecked(e.currentTarget.checked)} />
+                            <Checkbox label="Travel to areas where you may be at risk" checked={travel_risk} onChange={(e) => setIsTravelRiskChecked(e.currentTarget.checked)} />
+                            <Checkbox label="Risk of emotional distress" checked={emotional_risk} onChange={(e) => setIsEmotionalRiskChecked(e.currentTarget.checked)} />
+                            <Textarea label="Other: please outline" value={other_personal_risk} radius="md" autosize minRows={2} onChange={(e) => setOtherPersonalRisk(e.target.value)} />
                             <br></br>
                             <br></br>
-                            <Checkbox label="Any risk to the environment" checked={environment_risk} />
-                            <Checkbox label="Any conflict of interest" checked={conflict_interest} />
-                            <Checkbox label="Work/research that could be considered controversial or be of reputational risk to Aston University" checked={controversial_work} />
-                            <Checkbox label="Social media data and/or data from internet sources that could be regarded as private" checked={data_risk} />
-                            <Textarea label="Any other ethical considerations" description="(please state here or contact the Research Ethics Officer via your College Ethics inbox if there are any substantial ethical considerations you are aware of and would like to flag for the REC.)" radius="md" value={other_risk} autosize minRows={2} />
+                            <Checkbox label="Any risk to the environment" checked={environment_risk} onChange={(e) => setIsEnvironmentRiskChecked(e.currentTarget.checked)} />
+                            <Checkbox label="Any conflict of interest" checked={conflict_interest} onChange={(e) => setIsConflictInterestChecked(e.currentTarget.checked)} />
+                            <Checkbox label="Work/research that could be considered controversial or be of reputational risk to Aston University" checked={controversial_work} onChange={(e) => setIsControversialChecked(e.currentTarget.checked)} />
+                            <Checkbox label="Social media data and/or data from internet sources that could be regarded as private" checked={data_risk} onChange={(e) => setIsDataRiskChecked(e.currentTarget.checked)} />
+                            <Textarea label="Any other ethical considerations" description="(please state here or contact the Research Ethics Officer via your College Ethics inbox if there are any substantial ethical considerations you are aware of and would like to flag for the REC.)" radius="md" value={other_risk} autosize minRows={2} onChange={(e) => setOtherRisk(e.target.value)} />
                             <br></br>
                             <br></br>
                             <Title order={3}>Section 1: Study Details</Title>
@@ -307,6 +294,7 @@ const ethicsTeamReview = () => {
                                 withAsterisk
                                 autosize
                                 minRows={2}
+                                onChange={(e) => setProjectObjectives(e.target.value)}
                             />
                             <Textarea
                                 label="Study Objectives"
@@ -316,6 +304,7 @@ const ethicsTeamReview = () => {
                                 withAsterisk
                                 autosize
                                 minRows={2}
+                                onChange={(e) => setStudyObjectives(e.target.value)}
                             />
                             <Textarea
                                 label="Data Collection Method(s) to be Used"
@@ -325,6 +314,7 @@ const ethicsTeamReview = () => {
                                 withAsterisk
                                 autosize
                                 minRows={2}
+                                onChange={(e) => setDataCollectionMethod(e.target.value)}
                             />
                             <Textarea
                                 label="Data to be Collected"
@@ -334,6 +324,7 @@ const ethicsTeamReview = () => {
                                 withAsterisk
                                 autosize
                                 minRows={2}
+                                onChange={(e) => setDataCollected(e.target.value)}
                             />
                             <Textarea
                                 label="Participant Recruitment"
@@ -343,6 +334,7 @@ const ethicsTeamReview = () => {
                                 withAsterisk
                                 autosize
                                 minRows={2}
+                                onChange={(e) => setParticipantRecruitment(e.target.value)}
                             />
                             <Textarea
                                 label="Data Storage"
@@ -352,6 +344,7 @@ const ethicsTeamReview = () => {
                                 withAsterisk
                                 autosize
                                 minRows={2}
+                                onChange={(e) => setDataStorage(e.target.value)}
                             />
                             <Textarea
                                 label="For Secondary Data/Dataset Use Only: Compliance with Terms & Conditions of Use"
@@ -361,6 +354,7 @@ const ethicsTeamReview = () => {
                                 withAsterisk
                                 autosize
                                 minRows={2}
+                                onChange={(e) => setDataEvidence(e.target.value)}
                             />
                             <Textarea
                                 label="Risk"
@@ -370,14 +364,7 @@ const ethicsTeamReview = () => {
                                 withAsterisk
                                 autosize
                                 minRows={2}
-                            />
-                            <Textarea
-                                placeholder="E.g. Questionnaire link"
-                                label="Additional Comments"
-                                radius="md"
-                                value={comments}
-                                autosize
-                                minRows={2}
+                                onChange={(e) => setRisk(e.target.value)}
                             />
                             <br></br>
                             <Text>Documents</Text>
@@ -392,8 +379,8 @@ const ethicsTeamReview = () => {
                             <br></br>
                             <FileInput
                                 placeholder="Select File"
-                                label="Attachments"
-                                description="Upload documents to application (.docx)"
+                                label="Upload Documents"
+                                description="Upload all documents for intended study (.docx)"
                                 radius="md"
                                 multiple
                                 accept='.docx'
@@ -412,43 +399,25 @@ const ethicsTeamReview = () => {
                                 multiple
                                 accept='.docx'
                                 onChange={(e) => uploadFile(e)}
+                            />
+                            <br></br>
+                            <Textarea
+                                placeholder="E.g. Questionnaire link"
+                                label="Additional Comments"
+                                radius="md"
+                                value={comments}
+                                autosize
+                                minRows={2}
+                                onChange={(e) => setComments(e.target.value)}
                             />
                             <br></br>
                             <br></br>
                             <Title order={3}>Declaration</Title>
-                            <Text fw="700">Student:</Text>
-                            <Text fz="sm">I confirm the following:</Text>
-                            <Text fz="sm">• The above is an accurate representation of my study activities;</Text>
-                            <Text fz="sm">• That I shall not commence participant recruitment and/or data collection without ethical approval to do so (where applicable);</Text>
-                            <Text fz="sm">• That I shall seek further ethical approval should I need to make any changes to my study after ethical approval has been granted (where applicable);</Text>
-                            <Text fz="sm">• That I shall conduct my study with integrity and in accordance with the ethical approval granted (where applicable);</Text>
-                            <Text fz="sm">• That, where necessary, I shall use existing or secondary data in accordance with terms and conditions of use or ethical approval, as applicable;</Text>
-                            <Text fz="sm">• That I understand that if I breach the terms of the approval granted I may not be able to use the data collected in my project report and may face disciplinary procedures; and</Text>
-                            <Text fz="sm">• That I shall respect my participants (where applicable) and the data I have collected and am using.</Text>
                             <br></br>
-                            <TextInput label="Student Signature" placeholder="Print Name" withAsterisk radius="md" value={student_signature} />
-                            <br></br>
-                            <Text fw="700">Supervisor:</Text>
-                            <Text fz="sm">I confirm the following:</Text>
-                            <Text fz="sm">• That I have reviewed the content of this form and all associated paperwork and am happy with its standard and accuracy;</Text>
-                            <Text fz="sm">• That I shall monitor the student’s conduct of the study in accordance with the ethical approval granted (where applicable); and</Text>
-                            <Text fz="sm">• That I shall report to the person(s) granting ethical approval any breaches of approval and ensure that no data is included in the student’s work that has been collected in breach of approval.</Text>
-                            <br></br>
-                            <TextInput label="Supervisor Signature" placeholder="Print Name" withAsterisk radius="md" value={supervisor_signature} />
-                            <br></br>
-                            <br></br>
-                            <Textarea
-                                placeholder="Comments to applicant"
-                                label="Reviewer Comments"
-                                radius="md"
-                                autosize
-                                minRows={2}
-                                onChange={(e) => setReviewerComments(e.target.value)}
-                            />
+                            <TextInput label="Student Signature" value={student_signature} placeholder="Print Name" withAsterisk radius="md" />
+                            <TextInput label="Supervisor Signature" value={supervisor_signature} placeholder="Print Name" withAsterisk radius="md" />
                             <Group position="right" mt="md">
-                                <Button disabled={disableSubmit} type="submit">Approve</Button>
-                                <Button disabled={disableSubmit} onClick={() => requestChange()} color="yellow">Request Change</Button>
-                                <Button disabled={disableSubmit} onClick={() => rejectApplication()} color="red">Reject</Button>
+                                <Button disabled={disableSubmit} type="submit">Submit to Ethics Team</Button>
                             </Group>
                             {applicationError && <p className='error' style={{ color: "red" }}>{applicationError}</p>}
                         </form>
@@ -459,4 +428,4 @@ const ethicsTeamReview = () => {
     )
 }
 
-export default ethicsTeamReview
+export default onHold
