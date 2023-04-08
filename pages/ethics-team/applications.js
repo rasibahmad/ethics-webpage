@@ -36,7 +36,7 @@ export default function ethicsTeamApplications() {
         <Grid justify="center">
             <Grid.Col span={8}>
                 <Paper shadow="xl" p="xl" withBorder>
-                    <Title order={3} align='center'>Applications</Title>
+                    <Title order={3} align='center'>Ethics Team Applications</Title>
                     <br></br>
                     <Table highlightOnHover withBorder withColumnBorders>
                         <thead>

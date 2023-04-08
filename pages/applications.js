@@ -200,7 +200,7 @@ export default function Application() {
                                     <th>Created Date</th>
                                     <th>Last Updated</th>
                                     <th>Status</th>
-                                    <th onClick={() => refreshApplications()}>Action</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             {fetchError && <p className='error' style={{ color: "red" }}>{fetchError}</p>}

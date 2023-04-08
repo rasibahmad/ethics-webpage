@@ -1,8 +1,10 @@
 import { useUser, useSession } from "@supabase/auth-helpers-react";
-import { useEffect } from "react";
+import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import React, { useEffect } from 'react';
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { Grid, Paper, Title, Text } from '@mantine/core';
+import { GetServerSidePropsContext, NextApiRequest, NextApiResponse } from "next";
 
 export default function Home() {
   const user = useUser();
@@ -338,4 +340,29 @@ export default function Home() {
       </Grid.Col>
     </Grid>
   )
+}
+
+// Protected page - checks the session on the server
+export const getServerSideProps = async (ctx: GetServerSidePropsContext | { req: NextApiRequest; res: NextApiResponse; }) => {
+  // create authenticated supabase client
+  const supabase = createServerSupabaseClient(ctx)
+  // checks if there is a session
+  const {
+      data: { session },
+  } = await supabase.auth.getSession()
+
+  if (!session)
+      return {
+          redirect: {
+              destination: '/login',
+              permanent: false,
+          },
+      }
+
+  return {
+      props: {
+          initialSession: session,
+          user: session.user,
+      },
+  }
 }

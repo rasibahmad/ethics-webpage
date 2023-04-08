@@ -15,9 +15,9 @@ export default function supervisorApplications() {
             const { data, error } = await supabase
                 .from('applications')
                 .select()
-                // only shows applications assigned to supervisor with Status: 'Submitted', 'Supervisor Approved', 'Supervisor Review'
+                // only shows applications assigned to supervisor with Status: 'Submitted', 'Supervisor Approved', 'Supervisor Review', 'Approved, 'On Hold', 'Rejected'
                 .eq('supervisor_email', user.email)
-                .or('status.eq.Supervisor Approved,status.eq.Submitted,status.eq.Supervisor Review')
+                .or('status.eq.Supervisor Approved,status.eq.Submitted,status.eq.Supervisor Review,status.eq.Approved,status.eq.On Hold,status.eq.Rejected')
 
             if (error) {
                 setFetchError('No Applications Found')
@@ -38,7 +38,7 @@ export default function supervisorApplications() {
         <Grid justify="center">
             <Grid.Col span={8}>
                 <Paper shadow="xl" p="xl" withBorder>
-                    <Title order={3} align='center'>Applications</Title>
+                    <Title order={3} align='center'>Supervisor Applications</Title>
                     <br></br>
                     <Table highlightOnHover withBorder withColumnBorders>
                         <thead>

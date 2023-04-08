@@ -87,12 +87,12 @@ const ApplicationTable = ({ application, refreshApplications }) => {
             {status === "Not Submitted" ? (
                 <td>
                     <Button onClick={() => router.push(`/complete-application/${id}`)}>Edit</Button>
-                    <Button color="red" onClick={() => {deleteApplication(); refreshApplications ;notifications.show({title: 'Application Deleted', message: 'Record has been removed from your account', autoClose: 10000, icon: <IconCheck />})}}>Delete</Button>
+                    <Button color="red" onClick={async () => {await deleteApplication(); await refreshApplications() ;notifications.show({title: 'Application Deleted', message: 'Record has been removed from your account', autoClose: 10000, icon: <IconCheck />})}}>Delete</Button>
                 </td>
             ) : status === "Supervisor Review" ? (
-                <td><Button color="orange" onClick={() => {updateStatus(); notifications.show({title: 'Supervisor Review Cancelled', message: 'Application status updated to "Not Submitted"', autoClose: 10000, icon: <IconCheck />})}}>Cancel</Button></td>
+                <td><Button color="orange" onClick={async () => {await updateStatus(); await refreshApplications(); notifications.show({title: 'Supervisor Review Cancelled', message: 'Application status updated to "Not Submitted"', autoClose: 10000, icon: <IconCheck />})}}>Cancel</Button></td>
             ) : status === "Supervisor Approved" ? (
-                <td><Button onClick={() => {submitApproved(); notifications.show({title: 'Application Submitted!', message: 'Ethics team will review your application', autoClose: 10000, icon: <IconCheck />, color: 'teal'})}}>Submit</Button></td>
+                <td><Button onClick={async () => {await submitApproved(); await refreshApplications(); notifications.show({title: 'Application Submitted!', message: 'Ethics team will review your application', autoClose: 10000, icon: <IconCheck />, color: 'teal'})}}>Submit</Button></td>
             ) : status === "Supervisor Denied" ? (
                 <td><Button onClick={() => router.push(`/supervisor-denied/${id}`)}>Edit</Button></td>
             ) : status === "Approved" ? (

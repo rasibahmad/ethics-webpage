@@ -1,10 +1,10 @@
-import { Navbar, Button, Text } from "@nextui-org/react";
+import { AppBar, Text, Group, Button } from "@mantine/core"
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/router";
-import Link from "next/link";
 import { useEffect, useState } from "react";
+import React from "react";
 
-const NavbarComponent = () => {
+const Navbar = () => {
     const supabase = useSupabaseClient();
     const user = useUser();
     const router = useRouter();
@@ -12,7 +12,7 @@ const NavbarComponent = () => {
 
     function signOutUser() {
         supabase.auth.signOut();
-        router.push("/login"); 
+        router.push("/login");
     }
 
     useEffect(() => {
@@ -21,49 +21,46 @@ const NavbarComponent = () => {
                 .from('profiles')
                 .select()
                 .eq('id', user?.id)
-            
+                .single()
+
             if (data) {
+                console.log(data)
                 setUserRole(data.user_role)
             }
         }
         identifyUser()
-    }, [])
+    }, [user])
+    console.log(user_role)
 
     return (
-        <Navbar isBordered isCompact>
-            <Navbar.Brand as={Link} href="/">
-                <img style={{ width: 60, height: 50 }} src={"https://zanqrgclfkvzbsbmkpdt.supabase.co/storage/v1/object/public/images/aston_logo.png"} />
-            </Navbar.Brand>
-            <Navbar.Content hideIn="xs" variant="highlight-rounded">
-                <Navbar.Link href="/">Home</Navbar.Link>
-                <Navbar.Link href="/applications">Applications</Navbar.Link>
-                <Navbar.Link href="/FAQ">FAQs</Navbar.Link>
-            </Navbar.Content>
-
-            <Navbar.Content>
-                {!user ?  /*User doesnt exist*/
-                    <>
-                        <Navbar.Link href="/login">
-                            <Button auto flat>
-                                Login
-                            </Button>
-                        </Navbar.Link>
-                    </>
-                :         /* User does exist */
-                    <>
-                        <Navbar.Item>
-                            <Text>{user?.email}</Text>
-                        </Navbar.Item>
-                        <Navbar.Item>
-                            <Button auto flat onPress={() => signOutUser()}>
-                                Sign Out
-                            </Button>
-                        </Navbar.Item>
-                    </>
-                }  
-            </Navbar.Content>
-        </Navbar>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px' }}>
+            <a href="/"><img style={{ width: 60, height: 50 }} src={"https://zanqrgclfkvzbsbmkpdt.supabase.co/storage/v1/object/public/images/aston_logo.png"} /> </a>
+            <Group>
+                <Button variant="outline" onClick={() => router.push(`/`)}>Home</Button>
+                {user_role === 'student' ? (
+                    <Button variant="outline" onClick={() => router.push(`/applications`)}>Applications</Button>
+                ) : user_role === 'staff' ? (
+                    <Button variant="outline" onClick={() => router.push(`/supervisors/applications`)}>Supervisors Applications</Button>
+                ) : user_role === 'admin' ? (
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', marginRight: '10px' }}>
+                        <Button className="btn1" variant="outline" onClick={() => router.push(`/supervisors/applications`)}>Supervisor</Button>
+                        <Button className="btn2" variant="outline" onClick={() => router.push(`/ethics-team/applications`)}>Ethics Team</Button>
+                    </div>
+                ) : (
+                    <Button></Button>
+                )}
+                <Button variant="outline" onClick={() => router.push(`/FAQ`)}>FAQs</Button>
+                {!user ?
+                    <Button onClick={() => router.push(`/login`)}>Login</Button>
+                    :
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px' }}>
+                        <Text className="btn1" fz='sm'>{user?.email}</Text>
+                        <Button className="btn2" variant="outline" onClick={() => signOutUser()}>Sign out</Button>
+                    </div>
+                }
+            </Group>
+        </div>
     )
 }
 
-export default NavbarComponent;
+export default Navbar;

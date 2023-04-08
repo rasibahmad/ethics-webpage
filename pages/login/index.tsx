@@ -1,3 +1,5 @@
+// cited and adapted from https://supabase.com/docs/guides/getting-started/tutorials/with-nextjs
+
 import { Auth } from '@supabase/auth-ui-react'
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
 import { ThemeSupa } from '@supabase/auth-ui-shared'

@@ -3,8 +3,18 @@
     cursor: pointer;
 }
 
+/* make table elements appear clickable to user */
 .clickable {
     cursor: pointer;
     color: blue;
     text-decoration: underline;
 }
+
+/* space two elements apart */
+.btn1{
+    margin-right: 10px;
+ }
+ 
+ .btn2{
+    margin-left: 10px;
+ }
