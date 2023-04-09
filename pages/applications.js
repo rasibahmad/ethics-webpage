@@ -149,7 +149,7 @@ export default function Application() {
                                         onClick={() =>
                                             notifications.show({
                                                 title: 'Success Application Created!',
-                                                message: 'Application can be viewed in the Track Applications table',
+                                                message: 'Application can be viewed in My Applications table',
                                                 autoClose: 10000,
                                                 icon: <IconCheck />,
                                                 color: 'teal',
@@ -190,7 +190,7 @@ export default function Application() {
             <Grid.Col span={8}>
                 <Paper shadow="xl" p="xl" withBorder>
                     <div className="track applications" >
-                        <Title order={3} align='center'>Track Applications</Title>
+                        <Title order={3} align='center'>My Applications</Title>
                         <br></br>
                         <Table highlightOnHover withBorder withColumnBorders>
                             <thead>

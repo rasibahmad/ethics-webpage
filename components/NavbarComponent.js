@@ -1,4 +1,4 @@
-import { AppBar, Text, Group, Button } from "@mantine/core"
+import { Text, Group, Button } from "@mantine/core"
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -10,11 +10,13 @@ const Navbar = () => {
     const router = useRouter();
     const [user_role, setUserRole] = useState('')
 
+    // sign out button
     function signOutUser() {
         supabase.auth.signOut();
         router.push("/login");
     }
 
+    // user_role of logged in user determines navbar
     useEffect(() => {
         const identifyUser = async () => {
             const { data, error } = await supabase
@@ -24,13 +26,11 @@ const Navbar = () => {
                 .single()
 
             if (data) {
-                console.log(data)
                 setUserRole(data.user_role)
             }
         }
         identifyUser()
     }, [user])
-    console.log(user_role)
 
     return (
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px' }}>
@@ -40,7 +40,7 @@ const Navbar = () => {
                 {user_role === 'student' ? (
                     <Button variant="outline" onClick={() => router.push(`/applications`)}>Applications</Button>
                 ) : user_role === 'staff' ? (
-                    <Button variant="outline" onClick={() => router.push(`/supervisors/applications`)}>Supervisors Applications</Button>
+                    <Button variant="outline" onClick={() => router.push(`/supervisors/applications`)}>Applications</Button>
                 ) : user_role === 'admin' ? (
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', marginRight: '10px' }}>
                         <Button className="btn1" variant="outline" onClick={() => router.push(`/supervisors/applications`)}>Supervisor</Button>

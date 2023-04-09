@@ -38,7 +38,7 @@ export default function supervisorApplications() {
         <Grid justify="center">
             <Grid.Col span={8}>
                 <Paper shadow="xl" p="xl" withBorder>
-                    <Title order={3} align='center'>Supervisor Applications</Title>
+                    <Title order={3} align='center'>Student Applications</Title>
                     <br></br>
                     <Table highlightOnHover withBorder withColumnBorders>
                         <thead>
