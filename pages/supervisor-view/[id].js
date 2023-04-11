@@ -1,4 +1,5 @@
-import { Textarea, TextInput, Text, Checkbox, Title, Paper, Grid } from '@mantine/core'
+import { Textarea, Button, TextInput, Text, Checkbox, Title, Paper, Grid } from '@mantine/core'
+import { IconChevronLeft } from '@tabler/icons-react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -111,6 +112,8 @@ const supervisorView = () => {
                     <Paper shadow="xl" p="xl" withBorder>
                         <Title order={3} align="center">Title: {applicationTitle}</Title>
                         <Title order={4} align="center">ID: {id}</Title>
+                        <Button onClick={() => router.back()}> <IconChevronLeft /> Back</Button>
+                        <br></br>
                         <TextInput
                             label="Student Name"
                             radius="md"
@@ -302,6 +305,8 @@ const supervisorView = () => {
                         <Text fz="sm">• That I shall report to the person(s) granting ethical approval any breaches of approval and ensure that no data is included in the student’s work that has been collected in breach of approval.</Text>
                         <br></br>
                         <TextInput label="Supervisor Signature" placeholder="Print Name" withAsterisk radius="md" value={supervisor_signature} />
+                        <br></br>
+                        <Button onClick={() => router.back()}> <IconChevronLeft /> Back</Button>
                     </Paper>
                 </Grid.Col>
             </Grid>

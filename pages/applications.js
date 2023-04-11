@@ -52,6 +52,7 @@ export default function Application() {
             fetchApplications()
         }
     }
+    const disableCreateApp = !applicationTitle
 
     const [question, setQuestion] = useState('')
     const [questionError, setQuestionError] = useState(null)
@@ -83,6 +84,7 @@ export default function Application() {
                 .eq('id', data[0].id)
         }
     }
+    const disableQuestion = !question
 
     const [fetchError, setFetchError] = useState(null)
     const [applicationsList, setApplicationsList] = useState([])
@@ -145,6 +147,7 @@ export default function Application() {
                                 />
                                 <Group position="right" mt="md">
                                     <Button
+                                        disabled={disableCreateApp}
                                         type="submit"
                                         onClick={() =>
                                             notifications.show({
@@ -179,7 +182,7 @@ export default function Application() {
                                     onChange={(e) => setQuestion(e.target.value)}
                                 />
                                 <Group position="right" mt="md">
-                                    <Button type="submit">Submit</Button>
+                                    <Button disabled={disableQuestion} type="submit">Submit</Button>
                                 </Group>
                                 {questionError && <p className='error' style={{ color: "red" }}>{questionError}</p>}
                             </Box>
@@ -207,7 +210,7 @@ export default function Application() {
                             <tbody>
                                 {applicationsList && (
                                     applicationsList.map(application => (
-                                        <ApplicationTable key={application.id} application={application} refreshApplications={refreshApplications}/>
+                                        <ApplicationTable key={application.id} application={application} refreshApplications={refreshApplications} />
                                     ))
                                 )}
                             </tbody>

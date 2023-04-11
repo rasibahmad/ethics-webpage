@@ -1,4 +1,5 @@
-import { Textarea, Group, Button, TextInput, Text, Checkbox, Title, Paper, Grid } from '@mantine/core'
+import { Textarea, Button, TextInput, Text, Checkbox, Title, Paper, Grid } from '@mantine/core'
+import { IconChevronLeft } from '@tabler/icons-react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -113,6 +114,8 @@ const rejected = () => {
                     <Paper shadow="xl" p="xl" withBorder>
                         <Title order={3} align="center">Title: {applicationTitle}</Title>
                         <Title order={4} align="center">ID: {id}</Title>
+                        <Button onClick={() => router.back()}> <IconChevronLeft /> Back</Button>
+                        <br></br>
                         <Textarea
                             label="Reviewer Comments"
                             radius="md"
@@ -297,6 +300,8 @@ const rejected = () => {
                         <br></br>
                         <TextInput label="Student Signature" value={student_signature} placeholder="Print Name" withAsterisk radius="md" />
                         <TextInput label="Supervisor Signature" value={supervisor_signature} placeholder="Print Name" withAsterisk radius="md" />
+                        <br></br>
+                        <Button onClick={() => router.back()}> <IconChevronLeft /> Back</Button>
                     </Paper>
                 </Grid.Col>
             </Grid>

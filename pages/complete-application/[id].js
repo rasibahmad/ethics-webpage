@@ -1,6 +1,6 @@
 import { Textarea, Group, Button, TextInput, Text, Checkbox, FileInput, Title, Paper, Grid } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
-import { IconCheck } from '@tabler/icons-react';
+import { IconCheck, IconChevronLeft, IconSend } from '@tabler/icons-react';
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { supabase } from '../../client'
@@ -129,6 +129,11 @@ const completeApp = () => {
             <Title order={3} align="center">Title: {applicationTitle}</Title>
             <Title order={4} align="center">ID: {id}</Title>
             <form onSubmit={applicationForm}>
+              <Group position="apart" mt="md">
+                <Button onClick={() => router.back()}> <IconChevronLeft/> Back</Button>
+                <Button disabled={disableSubmit} type="submit" onClick={() => notifications.show({ title: 'Application Submitted!', message: 'Your supervisor can review and sign your application', autoClose: 10000, icon: <IconCheck />, color: 'teal' })}> <IconSend/> Submit to Supervisor</Button>
+              </Group>
+              <br></br>
               <TextInput
                 label="Student Name"
                 radius="md"
@@ -326,8 +331,9 @@ const completeApp = () => {
               <Text fz="sm">• That I shall respect my participants (where applicable) and the data I have collected and am using.</Text>
               <br></br>
               <TextInput label="Student Signature" placeholder="Print Name" withAsterisk radius="md" onChange={(e) => setStudentSignature(e.target.value)} />
-              <Group position="right" mt="md">
-                <Button disabled={disableSubmit} type="submit" onClick={() => notifications.show({title: 'Application Submitted!', message: 'Your supervisor can review and sign your application', autoClose: 10000, icon: <IconCheck />, color: 'teal'})}>Submit to Supervisor</Button>
+              <Group position="apart" mt="md">
+                <Button onClick={() => router.back()}> <IconChevronLeft/> Back</Button>
+                <Button disabled={disableSubmit} type="submit" onClick={() => notifications.show({ title: 'Application Submitted!', message: 'Your supervisor can review and sign your application', autoClose: 10000, icon: <IconCheck />, color: 'teal' })}> <IconSend/> Submit to Supervisor</Button>
               </Group>
               {applicationError && <p className='error' style={{ color: "red" }}>{applicationError}</p>}
             </form>

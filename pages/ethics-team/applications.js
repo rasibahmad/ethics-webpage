@@ -32,6 +32,14 @@ export default function ethicsTeamApplications() {
         fetchApplications()
     }, [])
 
+    function convertCSV(appList, headers) {
+        const headerRow = headers.join(',') + '\n';
+        const row = array.map((item) => headers.map((header) =>
+        item[header]).join(',')).join('\n')
+
+        return headerRow + row
+    }
+
     return (
         <Grid justify="center">
             <Grid.Col span={8}>
@@ -55,7 +63,7 @@ export default function ethicsTeamApplications() {
                         <tbody>
                             {applicationsList && (
                                 applicationsList.map(application => (
-                                    <EthicsTeamApplicationTable key={application.id} application={application} />
+                                    <EthicsTeamApplicationTable key={application.id} application={application} convertCSV={convertCSV}/>
                                 ))
                             )}
                         </tbody>

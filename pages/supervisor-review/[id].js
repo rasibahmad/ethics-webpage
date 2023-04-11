@@ -1,6 +1,6 @@
 import { Textarea, Group, Button, TextInput, Text, Checkbox, FileInput, Title, Paper, Grid } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
-import { IconCheck } from '@tabler/icons-react';
+import { IconCheck, IconChevronLeft, IconCircleCheck, IconCircleX } from '@tabler/icons-react';
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -50,7 +50,7 @@ const supervisorReview = () => {
     const [supervisor_signature, setSupervisorSignature] = useState('')
     const [documents, setDocuments] = useState([])
     const [supervisor_comment, setSupervisorComment] = useState('')
-    const disableApprove = !student_email || !student_name || !student_number || !supervisor_name || !supervisor_email || !project_objectives || !study_objectives || !data_collection_method || !data_collected || !participant_recruitment || !data_storage || !data_evidence || !risk || !student_signature || !supervisor_signature 
+    const disableApprove = !student_email || !student_name || !student_number || !supervisor_name || !supervisor_email || !project_objectives || !study_objectives || !data_collection_method || !data_collected || !participant_recruitment || !data_storage || !data_evidence || !risk || !student_signature || !supervisor_signature
     const CDNURL = "https://zanqrgclfkvzbsbmkpdt.supabase.co/storage/v1/object/public/documents/";
 
     // submitting form - status: Supervisor Approved
@@ -206,6 +206,12 @@ const supervisorReview = () => {
                         <Title order={3} align="center">Title: {applicationTitle}</Title>
                         <Title order={4} align="center">ID: {id}</Title>
                         <form onSubmit={applicationForm}>
+                            <Group position="right" mt="md">
+                                <Button onClick={() => router.back()}> <IconChevronLeft /> Back</Button>
+                                <Button disabled={disableApprove} color='green' onClick={() => notifications.show({ title: 'Application Approved', message: 'Student is able to submit application to ethics team for review', autoClose: 10000, icon: <IconCheck />, color: 'teal' })} type="submit"><IconCircleCheck/> Approve</Button>
+                                <Button onClick={() => { denyApplication(); notifications.show({ title: 'Application Denied', message: 'Student will be able to make changes and re-submit', autoClose: 10000, icon: <IconCheck /> }) }} color="red"> <IconCircleX/> Deny</Button>
+                            </Group>
+                            <br></br>
                             <TextInput
                                 label="Student Name"
                                 radius="md"
@@ -437,8 +443,9 @@ const supervisorReview = () => {
                             <br></br>
                             <TextInput label="Supervisor Signature" placeholder="Print Name" withAsterisk radius="md" value={supervisor_signature} onChange={(e) => setSupervisorSignature(e.target.value)} />
                             <Group position="right" mt="md">
-                                <Button disabled={disableApprove} onClick={() => notifications.show({title: 'Application Approved', message: 'Student is able to submit application to ethics team for review', autoClose: 10000, icon: <IconCheck />, color: 'teal'})} type="submit">Approve</Button>
-                                <Button onClick={() => {denyApplication(); notifications.show({title: 'Application Denied', message: 'Student will be able to make changes and re-submit', autoClose: 10000, icon: <IconCheck />})}} color="red">Deny</Button>
+                                <Button onClick={() => router.back()}> <IconChevronLeft /> Back</Button>
+                                <Button disabled={disableApprove} color='green' onClick={() => notifications.show({ title: 'Application Approved', message: 'Student is able to submit application to ethics team for review', autoClose: 10000, icon: <IconCheck />, color: 'teal' })} type="submit"><IconCircleCheck/> Approve</Button>
+                                <Button onClick={() => { denyApplication(); notifications.show({ title: 'Application Denied', message: 'Student will be able to make changes and re-submit', autoClose: 10000, icon: <IconCheck /> }) }} color="red"><IconCircleX /> Deny</Button>
                             </Group>
                             {applicationError && <p className='error' style={{ color: "red" }}>{applicationError}</p>}
                         </form>

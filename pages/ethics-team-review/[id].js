@@ -1,6 +1,6 @@
 import { Textarea, TextInput, FileInput, Text, Checkbox, Title, Paper, Grid, Select, Group, Button } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
-import { IconCheck } from '@tabler/icons-react';
+import { IconCheck, IconChevronLeft, IconCircleCheck, IconEyeEdit, IconCircleX } from '@tabler/icons-react';
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -210,6 +210,14 @@ const ethicsTeamReview = () => {
                     <Paper shadow="xl" p="xl" withBorder>
                         <Title order={3} align="center">Title: {applicationTitle}</Title>
                         <Title order={4} align="center">ID: {id}</Title>
+                        <form onSubmit={applicationForm}>
+                        <Group position="right" mt="md">
+                            <Button onClick={() => router.back()}> <IconChevronLeft /> Back</Button>
+                            <Button disabled={disableSubmit} color='green' type="submit" onClick={() => notifications.show({ title: 'Application Approved!', message: 'Student can begin their study', autoClose: 10000, icon: <IconCheck />, color: 'teal' })}><IconCircleCheck /> Approve</Button>
+                            <Button disabled={disableSubmit} onClick={() => { requestChange(); notifications.show({ title: 'Application On Hold', message: 'Student able to review and update application', autoClose: 10000, icon: <IconCheck /> }) }} color="yellow"><IconEyeEdit /> Request Change</Button>
+                            <Button disabled={disableSubmit} onClick={() => { rejectApplication(); notifications.show({ title: 'Application Rejected', message: 'Student application denied', autoClose: 10000, icon: <IconCheck /> }) }} color="red"><IIconCircleX /> Reject</Button>
+                        </Group>
+                        <br></br>
                         <Select
                             label="Assignee"
                             placeholder="Select team member"
@@ -220,7 +228,6 @@ const ethicsTeamReview = () => {
                             data={['Evaluator 1', 'Evaluator 2', 'Evaluator 3']}
                         />
                         <br></br>
-                        <form onSubmit={applicationForm}>
                             <TextInput
                                 label="Student Name"
                                 radius="md"
@@ -448,9 +455,10 @@ const ethicsTeamReview = () => {
                                 onChange={(e) => setReviewerComments(e.target.value)}
                             />
                             <Group position="right" mt="md">
-                                <Button disabled={disableSubmit} type="submit" onClick={() => notifications.show({title: 'Application Approved!', message: 'Student can begin their study', autoClose: 10000, icon: <IconCheck />, color: 'teal'})}>Approve</Button>
-                                <Button disabled={disableSubmit} onClick={() => {requestChange(); notifications.show({title: 'Application On Hold', message: 'Student able to review and update application', autoClose: 10000, icon: <IconCheck />})}} color="yellow">Request Change</Button>
-                                <Button disabled={disableSubmit} onClick={() => {rejectApplication(); notifications.show({title: 'Application Rejected', message: 'Student application denied', autoClose: 10000, icon: <IconCheck />})}} color="red">Reject</Button>
+                                <Button onClick={() => router.back()}> <IconChevronLeft /> Back</Button>
+                                <Button disabled={disableSubmit} color='green' type="submit" onClick={() => notifications.show({ title: 'Application Approved!', message: 'Student can begin their study', autoClose: 10000, icon: <IconCheck />, color: 'teal' })}><IconCircleCheck /> Approve</Button>
+                                <Button disabled={disableSubmit} onClick={() => { requestChange(); notifications.show({ title: 'Application On Hold', message: 'Student able to review and update application', autoClose: 10000, icon: <IconCheck /> }) }} color="yellow"><IconEyeEdit /> Request Change</Button>
+                                <Button disabled={disableSubmit} onClick={() => { rejectApplication(); notifications.show({ title: 'Application Rejected', message: 'Student application denied', autoClose: 10000, icon: <IconCheck /> }) }} color="red"><IconCircleX /> Reject</Button>
                             </Group>
                             {applicationError && <p className='error' style={{ color: "red" }}>{applicationError}</p>}
                         </form>

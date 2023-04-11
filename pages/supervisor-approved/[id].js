@@ -1,6 +1,6 @@
 import { Textarea, Group, Button, TextInput, Text, Checkbox, Title, Paper, Grid } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
-import { IconCheck } from '@tabler/icons-react';
+import { IconCheck, IconChevronLeft, IconSend } from '@tabler/icons-react';
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -140,6 +140,11 @@ const supervisorApproved = () => {
                         <Title order={3} align="center">Title: {applicationTitle}</Title>
                         <Title order={4} align="center">ID: {id}</Title>
                         <form onSubmit={applicationForm}>
+                            <Group position="apart" mt="md">
+                                <Button onClick={() => router.back()}> <IconChevronLeft /> Back</Button>
+                                <Button type="submit" onClick={() => notifications.show({ title: 'Application Submitted!', message: 'Ethics team will review your application', autoClose: 10000, icon: <IconCheck />, color: 'teal' })}><IconSend />Submit to Ethics Team</Button>
+                            </Group>
+                            <br></br>
                             <TextInput
                                 label="Student Name"
                                 radius="md"
@@ -332,8 +337,9 @@ const supervisorApproved = () => {
                             <Text fz="sm">• That I shall report to the person(s) granting ethical approval any breaches of approval and ensure that no data is included in the student’s work that has been collected in breach of approval.</Text>
                             <br></br>
                             <TextInput label="Supervisor Signature" placeholder="Print Name" withAsterisk radius="md" value={supervisor_signature} />
-                            <Group position="right" mt="md">
-                                <Button type="submit" onClick={() => notifications.show({title: 'Application Submitted!', message: 'Ethics team will review your application', autoClose: 10000, icon: <IconCheck />, color: 'teal'})}>Submit to Ethics Team</Button>
+                            <Group position="apart" mt="md">
+                                <Button onClick={() => router.back()}> <IconChevronLeft /> Back</Button>
+                                <Button type="submit" onClick={() => notifications.show({ title: 'Application Submitted!', message: 'Ethics team will review your application', autoClose: 10000, icon: <IconCheck />, color: 'teal' })}><IconSend />Submit to Ethics Team</Button>
                             </Group>
                             {applicationError && <p className='error' style={{ color: "red" }}>{applicationError}</p>}
                         </form>
