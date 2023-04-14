@@ -421,16 +421,6 @@ const supervisorReview = () => {
                                 onChange={(e) => uploadFile(e)}
                             />
                             <br></br>
-                            <Textarea
-                                placeholder="Optional comments visible to student only"
-                                label="Supervisor Comments"
-                                description="Enter comments for student if application requires changes"
-                                radius="md"
-                                autosize
-                                minRows={2}
-                                onChange={(e) => setSupervisorComment(e.target.value)}
-                            />
-                            <br></br>
                             <br></br>
                             <Title order={3}>Declaration</Title>
                             <TextInput label="Student Signature" placeholder="Print Name" withAsterisk radius="md" value={student_signature} onChange={(e) => setStudentSignature(e.target.value)} />
@@ -442,6 +432,16 @@ const supervisorReview = () => {
                             <Text fz="sm">• That I shall report to the person(s) granting ethical approval any breaches of approval and ensure that no data is included in the student’s work that has been collected in breach of approval.</Text>
                             <br></br>
                             <TextInput label="Supervisor Signature" placeholder="Print Name" withAsterisk radius="md" value={supervisor_signature} onChange={(e) => setSupervisorSignature(e.target.value)} />
+                            <br></br>
+                            <Textarea
+                                placeholder="Comments visible to student only"
+                                label="Supervisor Comments"
+                                description="Enter comments for student if application requires changes"
+                                radius="md"
+                                autosize
+                                minRows={2}
+                                onChange={(e) => setSupervisorComment(e.target.value)}
+                            />
                             <Group position="right" mt="md">
                                 <Button onClick={() => router.back()}> <IconChevronLeft /> Back</Button>
                                 <Button disabled={disableApprove} color='green' onClick={() => notifications.show({ title: 'Application Approved', message: 'Student is able to submit application to ethics team for review', autoClose: 10000, icon: <IconCheck />, color: 'teal' })} type="submit"><IconCircleCheck/> Approve</Button>

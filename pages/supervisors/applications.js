@@ -4,6 +4,7 @@ import { supabase } from '../../client';
 import SupervisorApplicationTable from '../../components/supervisorApplicationTable';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { useUser } from '@supabase/auth-helpers-react';
+import { DatePicker } from '@mantine/dates';
 
 export default function supervisorApplications() {
     const [fetchError, setFetchError] = useState(null)
@@ -34,12 +35,29 @@ export default function supervisorApplications() {
         fetchApplications()
     }, [])
 
+    // const [dateFilter, setDateFilter] = useState('')
+
+    // const filteredApplications = applicationsList.filter((app) => {
+    //     if (dateFilter === '') {
+    //         return true
+    //     }
+    //     const appDate = new Date(app.created_date);
+    //     const filterDate = new Date(dateFilter);
+    //     return (
+    //         appDate.getDate() === filterDate.getDate() &&
+    //         appDate.getMonth() === filterDate.getMonth() &&
+    //         appDate.getFullYear === filterDate.getFullYear()
+    //     )
+    // })
+
     return (
         <Grid justify="center">
             <Grid.Col span={8}>
                 <Paper shadow="xl" p="xl" withBorder>
                     <Title order={3} align='center'>Student Applications</Title>
                     <br></br>
+                    {/* <label htmlFor='dateFilter'>Filter by Created Date:</label>
+                    <DatePicker value={dateFilter} onChange={setDateFilter}/> */}
                     <Table highlightOnHover withBorder withColumnBorders>
                         <thead>
                             <tr>

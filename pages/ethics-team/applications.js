@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Paper, Table, Title, Grid } from '@mantine/core';
+import { Paper, Table, Title, Grid, Button, Group } from '@mantine/core';
 import { supabase } from '../../client';
 import EthicsTeamApplicationTable from '../../components/ethicsTeamApplicationTable';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
-import { useUser } from '@supabase/auth-helpers-react';
 
 export default function ethicsTeamApplications() {
     const [fetchError, setFetchError] = useState(null)
     const [applicationsList, setApplicationsList] = useState([])
-    const user = useUser();
+    const [applicationTitleFilter, setApplicationTitleFilter] = useState('')
+    const [idFilter, setIdFilter] = useState('')
+    const [studentNameFilter, setStudentNameFilter] = useState('')
+    const [createdFilter, setCreatedFilter] = useState('')
+    const [updatedFilter, setUpdatedFilter] = useState('')
+    const [statusFilter, setStatusFilter] = useState('')
 
     useEffect(() => {
         const fetchApplications = async () => {
@@ -24,7 +28,7 @@ export default function ethicsTeamApplications() {
             }
 
             if (data) {
-                console.log(data)
+                // console.log(data)
                 setApplicationsList(data)
                 setFetchError(null)
             }
@@ -34,17 +38,102 @@ export default function ethicsTeamApplications() {
 
     function convertCSV(appList, headers) {
         const headerRow = headers.join(',') + '\n';
-        const row = array.map((item) => headers.map((header) =>
-        item[header]).join(',')).join('\n')
+        const row = appList.map((item) => headers.map((header) =>
+            item[header]).join(',')).join('\n')
 
         return headerRow + row
+    }
+
+    // filter the applications based on the application title filter
+    const filteredApplications = applicationsList.filter((app) => {
+        return app.applicationTitle.includes(applicationTitleFilter) &&
+            app.id.toString().includes(idFilter) &&
+            app.student_name.toLowerCase().includes(studentNameFilter.toLowerCase()) &&
+            app.created_at.toLowerCase().includes(createdFilter.toLowerCase()) &&
+            app.updated_at.toLowerCase().includes(updatedFilter.toLowerCase()) &&
+            app.status.toLowerCase().includes(statusFilter.toLowerCase())
+    })
+
+    const exportCSV = () => {
+        const headers = ['id', 'Application Title', 'Student Name', 'Created Date', 'Last updated', 'Assignee', 'Status'];
+        const csvData = convertCSV(filteredApplications, headers);
+        const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'EthicsApplications.csv');
+        document.body.appendChild(link);
+        link.click()
+        document.body.removeChild(link);
+    }
+
+    const clearFilter = () => {
+        setStudentNameFilter('') 
+        setApplicationTitleFilter('')
+        setIdFilter('') 
+        setCreatedFilter('') 
+        setUpdatedFilter('') 
+        setStatusFilter('')
     }
 
     return (
         <Grid justify="center">
             <Grid.Col span={8}>
                 <Paper shadow="xl" p="xl" withBorder>
-                    <Title order={3} align='center'>Ethics Team Applications</Title>
+                    <Title order={3} align='center'>Ethics Applications</Title>
+                    <div>
+                        <label>Application Title: </label>
+                        <input
+                            type='text'
+                            id='appT'
+                            value={applicationTitleFilter}
+                            onChange={(e) => setApplicationTitleFilter(e.target.value)}
+                        />
+                        <br></br>
+                        <label>Student Name: </label>
+                        <input
+                            type='text'
+                            id='studentName'
+                            value={studentNameFilter}
+                            onChange={(e) => setStudentNameFilter(e.target.value)}
+                        />
+                        <br></br>
+                        <label>ID: </label>
+                        <input
+                            type='text'
+                            id='id'
+                            value={idFilter}
+                            onChange={(e) => setIdFilter(e.target.value)}
+                        />
+                        <br></br>
+                        <label>Created Date: </label>
+                        <input
+                            type='text'
+                            id='created'
+                            value={createdFilter}
+                            onChange={(e) => setCreatedFilter(e.target.value)}
+                        />
+                        <br></br>
+                        <label>Last Updated: </label>
+                        <input
+                            type='text'
+                            id='updated'
+                            value={updatedFilter}
+                            onChange={(e) => setUpdatedFilter(e.target.value)}
+                        />
+                        <br></br>
+                        <label>Status: </label>
+                        <input
+                            type='text'
+                            id='status'
+                            value={statusFilter}
+                            onChange={(e) => setStatusFilter(e.target.value)}
+                        />
+                        <br></br>
+                        <br></br>
+                        <Button onClick={clearFilter}>Clear</Button>
+                        <Button className='btn2' onClick={exportCSV}>Export</Button>
+                    </div>
                     <br></br>
                     <Table highlightOnHover withBorder withColumnBorders>
                         <thead>
@@ -61,11 +150,10 @@ export default function ethicsTeamApplications() {
                         </thead>
                         {fetchError && <p className='error' style={{ color: "red" }}>{fetchError}</p>}
                         <tbody>
-                            {applicationsList && (
-                                applicationsList.map(application => (
-                                    <EthicsTeamApplicationTable key={application.id} application={application} convertCSV={convertCSV}/>
-                                ))
-                            )}
+                            {/* use the filteredApplications list to render the table */}
+                            {filteredApplications.map(application => (
+                                <EthicsTeamApplicationTable key={application.id} application={application} applicationsList={filteredApplications} />
+                            ))}
                         </tbody>
                     </Table>
                 </Paper>
