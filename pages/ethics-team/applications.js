@@ -14,6 +14,7 @@ export default function ethicsTeamApplications() {
     const [updatedFilter, setUpdatedFilter] = useState('')
     const [statusFilter, setStatusFilter] = useState('')
 
+    // fetch applications for ethics team
     useEffect(() => {
         const fetchApplications = async () => {
             const { data, error } = await supabase
@@ -36,6 +37,7 @@ export default function ethicsTeamApplications() {
         fetchApplications()
     }, [])
 
+    // convert to csv
     function convertCSV(appList, headers) {
         const headerRow = headers.join(',') + '\n';
         const row = appList.map((item) => headers.map((header) =>
@@ -44,7 +46,7 @@ export default function ethicsTeamApplications() {
         return headerRow + row
     }
 
-    // filter the applications based on the application title filter
+    // filter the applications table based on the filter inputs
     const filteredApplications = applicationsList.filter((app) => {
         return app.applicationTitle.includes(applicationTitleFilter) &&
             app.id.toString().includes(idFilter) &&
@@ -54,6 +56,7 @@ export default function ethicsTeamApplications() {
             app.status.toLowerCase().includes(statusFilter.toLowerCase())
     })
 
+    // export the table to csv button: takes the filtered values and converts to csv
     const exportCSV = () => {
         const headers = ['id', 'Application Title', 'Student Name', 'Created Date', 'Last updated', 'Assignee', 'Status'];
         const csvData = convertCSV(filteredApplications, headers);
@@ -67,6 +70,7 @@ export default function ethicsTeamApplications() {
         document.body.removeChild(link);
     }
 
+    // clear filter button
     const clearFilter = () => {
         setStudentNameFilter('') 
         setApplicationTitleFilter('')
@@ -150,7 +154,7 @@ export default function ethicsTeamApplications() {
                         </thead>
                         {fetchError && <p className='error' style={{ color: "red" }}>{fetchError}</p>}
                         <tbody>
-                            {/* use the filteredApplications list to render the table */}
+                            {/* uses filteredApplications list in the table */}
                             {filteredApplications.map(application => (
                                 <EthicsTeamApplicationTable key={application.id} application={application} applicationsList={filteredApplications} />
                             ))}

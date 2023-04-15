@@ -79,7 +79,7 @@ const ethicsTeamReview = () => {
                 .single()
 
             if (error) {
-                // router.push('/ethics-team/applications')
+                router.push('/ethics-team/applications')
             }
 
             if (data) {
@@ -215,7 +215,7 @@ const ethicsTeamReview = () => {
                             <Button onClick={() => router.back()}> <IconChevronLeft /> Back</Button>
                             <Button disabled={disableSubmit} color='green' type="submit" onClick={() => notifications.show({ title: 'Application Approved!', message: 'Student can begin their study', autoClose: 10000, icon: <IconCheck />, color: 'teal' })}><IconCircleCheck /> Approve</Button>
                             <Button disabled={disableSubmit} onClick={() => { requestChange(); notifications.show({ title: 'Application On Hold', message: 'Student able to review and update application', autoClose: 10000, icon: <IconCheck /> }) }} color="yellow"><IconEyeEdit /> Request Change</Button>
-                            <Button disabled={disableSubmit} onClick={() => { rejectApplication(); notifications.show({ title: 'Application Rejected', message: 'Student application denied', autoClose: 10000, icon: <IconCheck /> }) }} color="red"><IIconCircleX /> Reject</Button>
+                            <Button disabled={disableSubmit} onClick={() => { rejectApplication(); notifications.show({ title: 'Application Rejected', message: 'Student application denied', autoClose: 10000, icon: <IconCheck /> }) }} color="red"><IconCircleX /> Reject</Button>
                         </Group>
                         <br></br>
                         <Select
@@ -393,7 +393,7 @@ const ethicsTeamReview = () => {
                             <Text fz="sm">{documents.map((document) => {
                                 return (
                                     <div className='attachment'>
-                                        <Link href={CDNURL + id + "/" + document.name} download> {document?.name} <br></br> </Link>
+                                        <Link href={CDNURL + id + "/" + document.name} download><a>{document?.name}<br></br></a></Link>
                                         <img style={{ width: 22, height: 20 }} onClick={() => deleteFile(document)} src={"https://zanqrgclfkvzbsbmkpdt.supabase.co/storage/v1/object/public/images/trash-var-solid.png"} />
                                     </div>
                                 )

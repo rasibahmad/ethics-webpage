@@ -38,7 +38,7 @@ export default function Application() {
                 .update({ user_id: user.id })
                 .eq('id', data[0].id)
 
-            // adds new application record/updates track application table
+            // adds new application record/updates my applications table
             const fetchApplications = async () => {
                 const { data } = await supabase
                     .from('applications')
@@ -52,6 +52,7 @@ export default function Application() {
             fetchApplications()
         }
     }
+    // disable create button until value entered
     const disableCreateApp = !applicationTitle
 
     const [question, setQuestion] = useState('')
@@ -111,6 +112,7 @@ export default function Application() {
         fetchApplications()
     }, [])
 
+    // refreshs application table when button pressed in table
     const refreshApplications = async () => {
         const { data, error } = await supabase
             .from('applications')

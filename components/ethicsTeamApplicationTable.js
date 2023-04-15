@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router'
 import { Button } from '@mantine/core'
-import { useState } from 'react'
 
 const EthicsTeamApplicationTable = ({ application }) => {
   const { id, student_name, applicationTitle, created_at, updated_at, assigned_to, status } = application

@@ -281,7 +281,7 @@ const rejected = () => {
                         <Text fz="sm">{documents.map((document) => {
                             return (
                                 <div className='attachment'>
-                                    <Link href={CDNURL + id + "/" + document.name} download> {document?.name} <br></br> </Link>
+                                    <Link href={CDNURL + id + "/" + document.name} download><a>{document?.name}<br></br></a></Link>
                                 </div>
                             )
                         })}</Text>
