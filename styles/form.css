@@ -18,3 +18,8 @@
  .btn2{
     margin-left: 10px;
  }
+
+ .active-navbar {
+    color: black;
+    font-weight: 600;
+ }

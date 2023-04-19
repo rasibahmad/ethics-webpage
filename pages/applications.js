@@ -12,6 +12,7 @@ export default function Application() {
     const [applicationError, setApplicationError] = useState(null)
     const user = useUser();
 
+    // adapted from https://youtu.be/dRVOhY-3iXY
     // create application function
     const createApplication = async (e) => {
         e.preventDefault()
@@ -55,6 +56,7 @@ export default function Application() {
     // disable create button until value entered
     const disableCreateApp = !applicationTitle
 
+    // adapted from https://youtu.be/VjohMDwjty4
     const [question, setQuestion] = useState('')
     const [questionError, setQuestionError] = useState(null)
 
@@ -85,8 +87,10 @@ export default function Application() {
                 .eq('id', data[0].id)
         }
     }
+    // disable submit button until value entered
     const disableQuestion = !question
 
+    // adapted from https://youtu.be/VjohMDwjty4
     const [fetchError, setFetchError] = useState(null)
     const [applicationsList, setApplicationsList] = useState([])
 
@@ -169,7 +173,8 @@ export default function Application() {
                     </div>
                 </Paper>
             </Grid.Col>
-            <Grid.Col span={4}>
+            {/* Commented out 'Ask Question Box' as will be moved to a separate 'Questions' page instead of being on the applications page */}
+            {/* <Grid.Col span={4}>
                 <Paper shadow="xl" p="xl" withBorder>
                     <div className="create question">
                         <form onSubmit={createQuestion}>
@@ -191,7 +196,7 @@ export default function Application() {
                         </form>
                     </div>
                 </Paper>
-            </Grid.Col>
+            </Grid.Col> */}
             <Grid.Col span={8}>
                 <Paper shadow="xl" p="xl" withBorder>
                     <div className="track applications" >
@@ -210,6 +215,7 @@ export default function Application() {
                             </thead>
                             {fetchError && <p className='error' style={{ color: "red" }}>{fetchError}</p>}
                             <tbody>
+                                {/* adapted from https://youtu.be/VjohMDwjty4 */}
                                 {applicationsList && (
                                     applicationsList.map(application => (
                                         <ApplicationTable key={application.id} application={application} refreshApplications={refreshApplications} />
@@ -225,6 +231,7 @@ export default function Application() {
 
 }
 
+// taken from https://supabase.com/docs/guides/auth/auth-helpers/nextjs#server-side-rendering-ssr
 // Protected page - checks the session on the server
 export const getServerSideProps = async (ctx) => {
     // create authenticated supabase client

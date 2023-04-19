@@ -10,9 +10,9 @@ const EthicsTeamApplicationTable = ({ application }) => {
   const updated = updated_at
   const createdDate = new Date(created)
   const updatedDate = new Date(updated)
-  const option = { day: 'numeric', month: 'numeric', year: 'numeric' }
-  const formattedCreatedDate = createdDate.toLocaleDateString('en-Uk', option);
-  const formattedUpdatedDate = updatedDate.toLocaleDateString('en-Uk', option);
+  const type = { day: 'numeric', month: 'numeric', year: 'numeric' }
+  const formattedCreatedDate = createdDate.toLocaleDateString('en-Uk', type);
+  const formattedUpdatedDate = updatedDate.toLocaleDateString('en-Uk', type);
 
   return (
     <tr>

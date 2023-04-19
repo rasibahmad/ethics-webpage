@@ -10,7 +10,7 @@ export default function faq() {
                     <Title order={3} align="center">Frequently Asked Questions</Title>
                     <br></br>
                     <Text fw={700}>How long does an application take to be reviewed?</Text>
-                    <Text fz="sm">Answer: Typically within 2 weeks however in some cases this is not possible.</Text>
+                    <Text fz="sm">Answer: Typically within 3 working days however in some cases this is not possible.</Text>
                     <br></br>
                     <Text fw={700}>Do I need ethical approval when using data from other sources?</Text>
                     <Text fz="sm">Answer: Yes, any data/dataset used in your project must be approved by ethics team.</Text>
@@ -23,6 +23,7 @@ export default function faq() {
     )
 }
 
+// taken from https://supabase.com/docs/guides/auth/auth-helpers/nextjs#server-side-rendering-ssr
 // Protected page - checks the session on the server
 export const getServerSideProps = async (ctx) => {
     // create authenticated supabase client

@@ -53,6 +53,7 @@ const supervisorReview = () => {
     const disableApprove = !student_email || !student_name || !student_number || !supervisor_name || !supervisor_email || !project_objectives || !study_objectives || !data_collection_method || !data_collected || !participant_recruitment || !data_storage || !data_evidence || !risk || !student_signature || !supervisor_signature
     const CDNURL = "https://zanqrgclfkvzbsbmkpdt.supabase.co/storage/v1/object/public/documents/";
 
+    // adapted from https://youtu.be/uMTJ8HzaVZk
     // submitting form - status: Supervisor Approved
     const applicationForm = async (e) => {
         e.preventDefault()
@@ -78,6 +79,7 @@ const supervisorReview = () => {
         }
     }
 
+    // adapted from https://youtu.be/yLdOpLk7bsI
     // uploading files function
     async function uploadFile(files) {
         const [file] = files
@@ -96,6 +98,7 @@ const supervisorReview = () => {
         }
     }
 
+    // adapted from https://youtu.be/eyRdcNhDcI4
     // fetching application data
     useEffect(() => {
         const fetchApplication = async () => {
@@ -208,8 +211,8 @@ const supervisorReview = () => {
                         <form onSubmit={applicationForm}>
                             <Group position="right" mt="md">
                                 <Button onClick={() => router.back()}> <IconChevronLeft /> Back</Button>
-                                <Button disabled={disableApprove} color='green' onClick={() => notifications.show({ title: 'Application Approved', message: 'Student is able to submit application to ethics team for review', autoClose: 10000, icon: <IconCheck />, color: 'teal' })} type="submit"><IconCircleCheck/> Approve</Button>
-                                <Button onClick={() => { denyApplication(); notifications.show({ title: 'Application Denied', message: 'Student will be able to make changes and re-submit', autoClose: 10000, icon: <IconCheck /> }) }} color="red"> <IconCircleX/> Deny</Button>
+                                <Button disabled={disableApprove} color='green' onClick={() => notifications.show({ title: 'Application Approved', message: 'Student is able to submit application to ethics team for review', autoClose: 10000, icon: <IconCheck />, color: 'teal' })} type="submit"><IconCircleCheck /> Approve</Button>
+                                <Button onClick={() => { denyApplication(); notifications.show({ title: 'Application Denied', message: 'Student will be able to make changes and re-submit', autoClose: 10000, icon: <IconCheck /> }) }} color="red"> <IconCircleX /> Deny</Button>
                             </Group>
                             <br></br>
                             <TextInput
@@ -388,6 +391,7 @@ const supervisorReview = () => {
                             />
                             <br></br>
                             <Text>Documents</Text>
+                            {/* adapted from https://youtu.be/8tfdY0Sf2rA */}
                             <Text fz="sm">{documents.map((document) => {
                                 return (
                                     <div className='attachment'>
@@ -444,7 +448,7 @@ const supervisorReview = () => {
                             />
                             <Group position="right" mt="md">
                                 <Button onClick={() => router.back()}> <IconChevronLeft /> Back</Button>
-                                <Button disabled={disableApprove} color='green' onClick={() => notifications.show({ title: 'Application Approved', message: 'Student is able to submit application to ethics team for review', autoClose: 10000, icon: <IconCheck />, color: 'teal' })} type="submit"><IconCircleCheck/> Approve</Button>
+                                <Button disabled={disableApprove} color='green' onClick={() => notifications.show({ title: 'Application Approved', message: 'Student is able to submit application to ethics team for review', autoClose: 10000, icon: <IconCheck />, color: 'teal' })} type="submit"><IconCircleCheck /> Approve</Button>
                                 <Button onClick={() => { denyApplication(); notifications.show({ title: 'Application Denied', message: 'Student will be able to make changes and re-submit', autoClose: 10000, icon: <IconCheck /> }) }} color="red"><IconCircleX /> Deny</Button>
                             </Group>
                             {applicationError && <p className='error' style={{ color: "red" }}>{applicationError}</p>}

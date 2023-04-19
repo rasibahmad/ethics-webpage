@@ -53,6 +53,7 @@ const supervisorDenied = () => {
     const CDNURL = "https://zanqrgclfkvzbsbmkpdt.supabase.co/storage/v1/object/public/documents/";
     const disableSubmit = !student_email || !student_name || !student_number || !supervisor_name || !supervisor_email || !project_objectives || !study_objectives || !data_collection_method || !data_collected || !participant_recruitment || !data_storage || !data_evidence || !risk || !student_signature
 
+    // adapted from https://youtu.be/uMTJ8HzaVZk
     // submitting form
     const applicationForm = async (e) => {
         e.preventDefault()
@@ -78,6 +79,7 @@ const supervisorDenied = () => {
         }
     }
 
+    // adapted from https://youtu.be/yLdOpLk7bsI
     // uploading files function
     async function uploadFile(files) {
         const [file] = files
@@ -96,6 +98,7 @@ const supervisorDenied = () => {
         }
     }
 
+    // adapted from https://youtu.be/eyRdcNhDcI4
     // fetching application data
     useEffect(() => {
         const fetchApplication = async () => {
@@ -194,7 +197,7 @@ const supervisorDenied = () => {
                         <form onSubmit={applicationForm}>
                             <Group position="apart" mt="md">
                                 <Button onClick={() => router.back()}> <IconChevronLeft /> Back</Button>
-                                <Button disabled={disableSubmit} type="submit" onClick={() => notifications.show({ title: 'Application Submitted!', message: 'Your supervisor can review and sign your application', autoClose: 10000, icon: <IconCheck />, color: 'teal' })}><IconSend/> Submit to Supervisor</Button>
+                                <Button disabled={disableSubmit} type="submit" onClick={() => notifications.show({ title: 'Application Submitted!', message: 'Your supervisor can review and sign your application', autoClose: 10000, icon: <IconCheck />, color: 'teal' })}><IconSend /> Submit to Supervisor</Button>
                             </Group>
                             <br></br>
                             <Textarea
@@ -374,6 +377,7 @@ const supervisorDenied = () => {
                             />
                             <br></br>
                             <Text>Documents</Text>
+                            {/* adapted from https://youtu.be/8tfdY0Sf2rA */}
                             <Text fz="sm">{documents.map((document) => {
                                 return (
                                     <div className='attachment'>
@@ -432,7 +436,7 @@ const supervisorDenied = () => {
                             <TextInput label="Student Signature" placeholder="Print Name" withAsterisk radius="md" onChange={(e) => setStudentSignature(e.target.value)} />
                             <Group position="apart" mt="md">
                                 <Button onClick={() => router.back()}> <IconChevronLeft /> Back</Button>
-                                <Button disabled={disableSubmit} type="submit" onClick={() => notifications.show({ title: 'Application Submitted!', message: 'Your supervisor can review and sign your application', autoClose: 10000, icon: <IconCheck />, color: 'teal' })}><IconSend/> Submit to Supervisor</Button>
+                                <Button disabled={disableSubmit} type="submit" onClick={() => notifications.show({ title: 'Application Submitted!', message: 'Your supervisor can review and sign your application', autoClose: 10000, icon: <IconCheck />, color: 'teal' })}><IconSend /> Submit to Supervisor</Button>
                             </Group>
                             {applicationError && <p className='error' style={{ color: "red" }}>{applicationError}</p>}
                         </form>

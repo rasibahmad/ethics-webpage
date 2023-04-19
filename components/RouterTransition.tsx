@@ -1,5 +1,5 @@
-// cited from https://mantine.dev/others/nprogress/#setup-navigationprogress
-// components/RouterTransition.tsx
+// taken directly from https://mantine.dev/others/nprogress/#setup-navigationprogress
+
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { NavigationProgress, nprogress } from '@mantine/nprogress';

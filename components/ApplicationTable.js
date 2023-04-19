@@ -14,9 +14,9 @@ const ApplicationTable = ({ application, refreshApplications }) => {
     const updated = updated_at
     const createdDate = new Date(created)
     const updatedDate = new Date(updated)
-    const options = { month: 'numeric', day: 'numeric', year: 'numeric' }
-    const formattedCreatedDate = createdDate.toLocaleDateString('en-Uk', options);
-    const formattedUpdatedDate = updatedDate.toLocaleDateString('en-Uk', options);
+    const type = { month: 'numeric', day: 'numeric', year: 'numeric' }
+    const formattedCreatedDate = createdDate.toLocaleDateString('en-Uk', type);
+    const formattedUpdatedDate = updatedDate.toLocaleDateString('en-Uk', type);
 
     // delete application
     async function deleteApplication() {

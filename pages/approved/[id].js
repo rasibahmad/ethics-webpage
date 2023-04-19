@@ -40,6 +40,7 @@ const studyApproved = () => {
     const [reviewer_comments, setReviewerComments] = useState('')
     const CDNURL = "https://zanqrgclfkvzbsbmkpdt.supabase.co/storage/v1/object/public/documents/";
 
+    // adapted from https://youtu.be/eyRdcNhDcI4
     // fetching application data
     useEffect(() => {
         const fetchApplication = async () => {
@@ -279,6 +280,7 @@ const studyApproved = () => {
                         />
                         <br></br>
                         <Text>Documents</Text>
+                        {/* adapted from https://youtu.be/8tfdY0Sf2rA */}
                         <Text fz="sm">{documents.map((document) => {
                             return (
                                 <div className='attachment'>

@@ -4,9 +4,9 @@ import { supabase } from '../../client';
 import SupervisorApplicationTable from '../../components/supervisorApplicationTable';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { useUser } from '@supabase/auth-helpers-react';
-import { DatePicker } from '@mantine/dates';
 
 export default function supervisorApplications() {
+    // adapted from https://youtu.be/VjohMDwjty4
     const [fetchError, setFetchError] = useState(null)
     const [applicationsList, setApplicationsList] = useState([])
     const user = useUser();
@@ -35,29 +35,12 @@ export default function supervisorApplications() {
         fetchApplications()
     }, [])
 
-    // const [dateFilter, setDateFilter] = useState('')
-
-    // const filteredApplications = applicationsList.filter((app) => {
-    //     if (dateFilter === '') {
-    //         return true
-    //     }
-    //     const appDate = new Date(app.created_date);
-    //     const filterDate = new Date(dateFilter);
-    //     return (
-    //         appDate.getDate() === filterDate.getDate() &&
-    //         appDate.getMonth() === filterDate.getMonth() &&
-    //         appDate.getFullYear === filterDate.getFullYear()
-    //     )
-    // })
-
     return (
         <Grid justify="center">
             <Grid.Col span={8}>
                 <Paper shadow="xl" p="xl" withBorder>
                     <Title order={3} align='center'>Student Applications</Title>
                     <br></br>
-                    {/* <label htmlFor='dateFilter'>Filter by Created Date:</label>
-                    <DatePicker value={dateFilter} onChange={setDateFilter}/> */}
                     <Table highlightOnHover withBorder withColumnBorders>
                         <thead>
                             <tr>
@@ -72,6 +55,7 @@ export default function supervisorApplications() {
                         </thead>
                         {fetchError && <p className='error' style={{ color: "red" }}>{fetchError}</p>}
                         <tbody>
+                            {/* adapted from https://youtu.be/VjohMDwjty4 */}
                             {applicationsList && (
                                 applicationsList.map(application => (
                                     <SupervisorApplicationTable key={application.id} application={application} />
@@ -85,6 +69,7 @@ export default function supervisorApplications() {
     )
 }
 
+// taken from https://supabase.com/docs/guides/auth/auth-helpers/nextjs#server-side-rendering-ssr
 // Protected page - checks the session on the server
 export const getServerSideProps = async (ctx) => {
     // create authenticated supabase client

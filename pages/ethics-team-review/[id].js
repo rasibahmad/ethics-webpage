@@ -44,6 +44,7 @@ const ethicsTeamReview = () => {
     const disableSubmit = !student_email || !student_name || !student_number || !supervisor_name || !supervisor_email || !project_objectives || !study_objectives || !data_collection_method || !data_collected || !participant_recruitment || !data_storage || !data_evidence || !risk || !student_signature || !supervisor_signature || !reviewer_comments
     const CDNURL = "https://zanqrgclfkvzbsbmkpdt.supabase.co/storage/v1/object/public/documents/";
 
+    // adapted from https://youtu.be/uMTJ8HzaVZk
     // submitting form - status: Approved
     const applicationForm = async (e) => {
         e.preventDefault()
@@ -69,6 +70,7 @@ const ethicsTeamReview = () => {
         }
     }
 
+    // adapted from https://youtu.be/eyRdcNhDcI4
     // fetching application data
     useEffect(() => {
         const fetchApplication = async () => {
@@ -136,6 +138,7 @@ const ethicsTeamReview = () => {
         retrieveFile()
     }, [id])
 
+  // adapted from https://youtu.be/yLdOpLk7bsI
     // uploading files function
     async function uploadFile(files) {
         const [file] = files
@@ -211,23 +214,23 @@ const ethicsTeamReview = () => {
                         <Title order={3} align="center">Title: {applicationTitle}</Title>
                         <Title order={4} align="center">ID: {id}</Title>
                         <form onSubmit={applicationForm}>
-                        <Group position="right" mt="md">
-                            <Button onClick={() => router.back()}> <IconChevronLeft /> Back</Button>
-                            <Button disabled={disableSubmit} color='green' type="submit" onClick={() => notifications.show({ title: 'Application Approved!', message: 'Student can begin their study', autoClose: 10000, icon: <IconCheck />, color: 'teal' })}><IconCircleCheck /> Approve</Button>
-                            <Button disabled={disableSubmit} onClick={() => { requestChange(); notifications.show({ title: 'Application On Hold', message: 'Student able to review and update application', autoClose: 10000, icon: <IconCheck /> }) }} color="yellow"><IconEyeEdit /> Request Change</Button>
-                            <Button disabled={disableSubmit} onClick={() => { rejectApplication(); notifications.show({ title: 'Application Rejected', message: 'Student application denied', autoClose: 10000, icon: <IconCheck /> }) }} color="red"><IconCircleX /> Reject</Button>
-                        </Group>
-                        <br></br>
-                        <Select
-                            label="Assignee"
-                            placeholder="Select team member"
-                            searchable
-                            onSearchChange={setAssignedTo}
-                            searchValue={assigned_to}
-                            nothingFound="No options"
-                            data={['Evaluator 1', 'Evaluator 2', 'Evaluator 3']}
-                        />
-                        <br></br>
+                            <Group position="right" mt="md">
+                                <Button onClick={() => router.back()}> <IconChevronLeft /> Back</Button>
+                                <Button disabled={disableSubmit} color='green' type="submit" onClick={() => notifications.show({ title: 'Application Approved!', message: 'Student can begin their study', autoClose: 10000, icon: <IconCheck />, color: 'teal' })}><IconCircleCheck /> Approve</Button>
+                                <Button disabled={disableSubmit} onClick={() => { requestChange(); notifications.show({ title: 'Application On Hold', message: 'Student able to review and update application', autoClose: 10000, icon: <IconCheck /> }) }} color="yellow"><IconEyeEdit /> Request Change</Button>
+                                <Button disabled={disableSubmit} onClick={() => { rejectApplication(); notifications.show({ title: 'Application Rejected', message: 'Student application denied', autoClose: 10000, icon: <IconCheck /> }) }} color="red"><IconCircleX /> Reject</Button>
+                            </Group>
+                            <br></br>
+                            <Select
+                                label="Assignee"
+                                placeholder="Select team member"
+                                searchable
+                                onSearchChange={setAssignedTo}
+                                searchValue={assigned_to}
+                                nothingFound="No options"
+                                data={['Evaluator 1', 'Evaluator 2', 'Evaluator 3']}
+                            />
+                            <br></br>
                             <TextInput
                                 label="Student Name"
                                 radius="md"
@@ -390,6 +393,7 @@ const ethicsTeamReview = () => {
                             />
                             <br></br>
                             <Text>Documents</Text>
+                            {/* adapted from https://youtu.be/8tfdY0Sf2rA */}
                             <Text fz="sm">{documents.map((document) => {
                                 return (
                                     <div className='attachment'>

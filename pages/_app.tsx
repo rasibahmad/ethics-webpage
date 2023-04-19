@@ -1,4 +1,4 @@
-// cited and adapted from https://supabase.com/docs/guides/getting-started/tutorials/with-nextjs
+// adapted from https://supabase.com/docs/guides/getting-started/tutorials/with-nextjs
 
 import { MantineProvider, Box } from '@mantine/core'
 import { RouterTransition } from '../components/RouterTransition';
@@ -39,7 +39,7 @@ export default function MyApp({
             },
           })}
         >
-          {/* cited from https://mantine.dev/others/nprogress/#setup-navigationprogress */}
+          {/* taken from https://mantine.dev/others/nprogress/#setup-navigationprogress */}
           <RouterTransition />
           {/* adapted from https://mantine.dev/others/notifications/ */}
           <Notifications position='top-center'/>

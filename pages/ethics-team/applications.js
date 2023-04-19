@@ -14,6 +14,7 @@ export default function ethicsTeamApplications() {
     const [updatedFilter, setUpdatedFilter] = useState('')
     const [statusFilter, setStatusFilter] = useState('')
 
+    // adapted from https://youtu.be/VjohMDwjty4
     // fetch applications for ethics team
     useEffect(() => {
         const fetchApplications = async () => {
@@ -38,6 +39,7 @@ export default function ethicsTeamApplications() {
     }, [])
 
     // convert to csv
+    // adapted from https://stackoverflow.com/questions/48760815/export-to-csv-button-in-react-table
     function convertCSV(appList, headers) {
         const headerRow = headers.join(',') + '\n';
         const row = appList.map((item) => headers.map((header) =>
@@ -57,9 +59,11 @@ export default function ethicsTeamApplications() {
     })
 
     // export the table to csv button: takes the filtered values and converts to csv
+    // adapted from https://stackoverflow.com/questions/48760815/export-to-csv-button-in-react-table
     const exportCSV = () => {
-        const headers = ['id', 'Application Title', 'Student Name', 'Created Date', 'Last updated', 'Assignee', 'Status'];
+        const headers = ['id', 'applicationTitle', 'student_name', 'created_at', 'updated_at', 'assigned_to', 'status'];
         const csvData = convertCSV(filteredApplications, headers);
+        console.log(csvData)
         const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
@@ -166,6 +170,7 @@ export default function ethicsTeamApplications() {
     )
 }
 
+// taken from https://supabase.com/docs/guides/auth/auth-helpers/nextjs#server-side-rendering-ssr
 // Protected page - checks the session on the server
 export const getServerSideProps = async (ctx) => {
     // create authenticated supabase client

@@ -39,6 +39,7 @@ const completeApp = () => {
   const [supervisor_email, setSupervisorEmail] = useState('')
   const disableSubmit = !student_email || !student_name || !student_number || !supervisor_name || !supervisor_email || !project_objectives || !study_objectives || !data_collection_method || !data_collected || !participant_recruitment || !data_storage || !data_evidence || !risk || !student_signature
 
+  // adapted from https://youtu.be/uMTJ8HzaVZk
   // submitting form
   const applicationForm = async (e) => {
     e.preventDefault()
@@ -64,6 +65,7 @@ const completeApp = () => {
     }
   }
 
+  // adapted from https://youtu.be/eyRdcNhDcI4
   // fetching application 
   useEffect(() => {
     const fetchApplication = async () => {
@@ -74,7 +76,7 @@ const completeApp = () => {
         .single()
 
       if (error) {
-        // router.push('/applications')
+        router.push('/applications')
       }
 
       if (data) {
@@ -104,6 +106,7 @@ const completeApp = () => {
     checkbox()
   }, [isHumanParticipantsChecked, isTestingApparatusChecked, isLoneWorkingChecked, isTravelRiskChecked, isEmotionalRiskChecked, isEnvironmentRiskChecked, isConflictInterestChecked, isControversialChecked, isDataRiskChecked])
 
+  // adapted from https://youtu.be/yLdOpLk7bsI
   // uploading files function
   async function uploadFile(files) {
     const [file] = files
@@ -130,8 +133,8 @@ const completeApp = () => {
             <Title order={4} align="center">ID: {id}</Title>
             <form onSubmit={applicationForm}>
               <Group position="apart" mt="md">
-                <Button onClick={() => router.back()}> <IconChevronLeft/> Back</Button>
-                <Button disabled={disableSubmit} type="submit" onClick={() => notifications.show({ title: 'Application Submitted!', message: 'Your supervisor can review and sign your application', autoClose: 10000, icon: <IconCheck />, color: 'teal' })}> <IconSend/> Submit to Supervisor</Button>
+                <Button onClick={() => router.back()}> <IconChevronLeft /> Back</Button>
+                <Button disabled={disableSubmit} type="submit" onClick={() => notifications.show({ title: 'Application Submitted!', message: 'Your supervisor can review and sign your application', autoClose: 10000, icon: <IconCheck />, color: 'teal' })}> <IconSend /> Submit to Supervisor</Button>
               </Group>
               <br></br>
               <TextInput
@@ -332,8 +335,8 @@ const completeApp = () => {
               <br></br>
               <TextInput label="Student Signature" placeholder="Print Name" withAsterisk radius="md" onChange={(e) => setStudentSignature(e.target.value)} />
               <Group position="apart" mt="md">
-                <Button onClick={() => router.back()}> <IconChevronLeft/> Back</Button>
-                <Button disabled={disableSubmit} type="submit" onClick={() => notifications.show({ title: 'Application Submitted!', message: 'Your supervisor can review and sign your application', autoClose: 10000, icon: <IconCheck />, color: 'teal' })}> <IconSend/> Submit to Supervisor</Button>
+                <Button onClick={() => router.back()}> <IconChevronLeft /> Back</Button>
+                <Button disabled={disableSubmit} type="submit" onClick={() => notifications.show({ title: 'Application Submitted!', message: 'Your supervisor can review and sign your application', autoClose: 10000, icon: <IconCheck />, color: 'teal' })}> <IconSend /> Submit to Supervisor</Button>
               </Group>
               {applicationError && <p className='error' style={{ color: "red" }}>{applicationError}</p>}
             </form>

@@ -342,6 +342,7 @@ export default function Home() {
   )
 }
 
+// taken from https://supabase.com/docs/guides/auth/auth-helpers/nextjs#server-side-rendering-ssr
 // Protected page - checks the session on the server
 export const getServerSideProps = async (ctx: GetServerSidePropsContext | { req: NextApiRequest; res: NextApiResponse; }) => {
   // create authenticated supabase client
