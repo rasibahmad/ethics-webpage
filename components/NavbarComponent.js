@@ -38,6 +38,7 @@ const Navbar = () => {
             <a href="/"><img style={{ width: 60, height: 50 }} src={"https://zanqrgclfkvzbsbmkpdt.supabase.co/storage/v1/object/public/images/aston_logo.png"} /> </a>
             <Group>
                 <Button variant="outline" onClick={() => router.push(`/`)}><IconHome/>Home</Button>
+                {/* Navbar options for different user roles */}
                 {user_role === 'student' ? (
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', marginRight: '10px' }}>
                         <Button className="btn1" variant="outline" onClick={() => router.push(`/applications`)}><IconFileDescription/>Applications</Button>

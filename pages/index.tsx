@@ -11,11 +11,11 @@ export default function Home() {
   const session = useSession();
   const router = useRouter();
 
-  useEffect(() => {
-    if (!session) {
-      router.push('/login')
-    }
-  }, [session])
+  // useEffect(() => {
+  //   if (!session) {
+  //     router.push('/login')
+  //   }
+  // }, [session])
 
   return (
     <Grid gutter="lg" justify="center">
