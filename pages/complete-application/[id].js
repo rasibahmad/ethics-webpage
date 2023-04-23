@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { supabase } from '../../client'
 
-const CompleteApp = () => {
+const completeApp = () => {
   const router = useRouter()
   const { id } = router.query
   const [applicationTitle, setApplicationTitle] = useState('')
@@ -347,4 +347,4 @@ const CompleteApp = () => {
   )
 }
 
-export default CompleteApp
+export default completeApp
