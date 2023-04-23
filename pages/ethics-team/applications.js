@@ -12,16 +12,17 @@ export default function ethicsTeamApplications() {
     const [studentNameFilter, setStudentNameFilter] = useState('')
     const [createdFilter, setCreatedFilter] = useState('')
     const [updatedFilter, setUpdatedFilter] = useState('')
-    const [statusFilter, setStatusFilter] = useState('')
+    const [assignedFilter, setAssignedFilter] = useState('')
+    const [statusFilter, setStatusFilter] = useState('Submitted')
 
-    // adapted from https://youtu.be/VjohMDwjty4
+    // adapted from https://youtu.be/VjohMDwjty4 + https://supabase.com/docs/reference/javascript/or
     // fetch applications for ethics team
     useEffect(() => {
         const fetchApplications = async () => {
             const { data, error } = await supabase
                 .from('applications')
                 .select()
-                .eq('status', 'Submitted')
+                .or('status.eq.Approved, status.eq.Submitted, status.eq.Rejected, status.eq.On Hold')
 
             if (error) {
                 setFetchError('No Applications Found')
@@ -55,6 +56,7 @@ export default function ethicsTeamApplications() {
             app.student_name.toLowerCase().includes(studentNameFilter.toLowerCase()) &&
             app.created_at.toLowerCase().includes(createdFilter.toLowerCase()) &&
             app.updated_at.toLowerCase().includes(updatedFilter.toLowerCase()) &&
+            app.assigned_to.toLowerCase().includes(assignedFilter.toLowerCase()) &&
             app.status.toLowerCase().includes(statusFilter.toLowerCase())
     })
 
@@ -76,11 +78,11 @@ export default function ethicsTeamApplications() {
 
     // clear filter button
     const clearFilter = () => {
-        setStudentNameFilter('') 
+        setStudentNameFilter('')
         setApplicationTitleFilter('')
-        setIdFilter('') 
-        setCreatedFilter('') 
-        setUpdatedFilter('') 
+        setIdFilter('')
+        setCreatedFilter('')
+        setUpdatedFilter('')
         setStatusFilter('')
     }
 
@@ -130,13 +132,33 @@ export default function ethicsTeamApplications() {
                             onChange={(e) => setUpdatedFilter(e.target.value)}
                         />
                         <br></br>
+                        <label>Assigned to: </label>
+                        <select
+                            type='text'
+                            id='assignee'
+                            value={assignedFilter}
+                            onChange={(e) => setAssignedFilter(e.target.value)}
+                        >
+                            <option value=""></option>
+                            <option value="Unassigned">Unassigned</option>
+                            <option value="Evaluator 1">Evaluator 1</option>
+                            <option value="Evaluator 2">Evaluator 2</option>
+                            <option value="Evaluator 3">Evaluator 3</option>
+                        </select>
+                        <br></br>
                         <label>Status: </label>
-                        <input
+                        <select
                             type='text'
                             id='status'
                             value={statusFilter}
                             onChange={(e) => setStatusFilter(e.target.value)}
-                        />
+                        >
+                            <option value="Submitted">Submitted</option>
+                            <option value="Approved">Approved</option>
+                            <option value="On Hold">On Hold</option>
+                            <option value="Rejected">Rejected</option>
+                            <option value=""></option>
+                        </select>
                         <br></br>
                         <br></br>
                         <Button onClick={clearFilter}>Clear</Button>

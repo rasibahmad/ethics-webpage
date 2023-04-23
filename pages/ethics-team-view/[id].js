@@ -1,11 +1,11 @@
-import { Textarea, Button, TextInput, Text, Checkbox, Title, Paper, Grid } from '@mantine/core'
+import { Textarea, Button, TextInput, Text, Checkbox, Title, Paper, Grid, Select } from '@mantine/core'
 import { IconChevronLeft } from '@tabler/icons-react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { supabase } from '../../client'
 
-const rejected = () => {
+const ethicsView = () => {
     const router = useRouter()
     const { id } = router.query
     const [applicationTitle, setApplicationTitle] = useState('')
@@ -36,8 +36,9 @@ const rejected = () => {
     const [data_risk, setDataRisk] = useState(false)
     const [student_signature, setStudentSignature] = useState('')
     const [supervisor_signature, setSupervisorSignature] = useState('')
-    const [reviewer_comments, setReviewerComments] = useState('')
     const [documents, setDocuments] = useState([])
+    const [reviewer_comments, setReviewerComments] = useState('')
+    const [assigned_to, setAssignedTo] = useState('')
     const CDNURL = "https://zanqrgclfkvzbsbmkpdt.supabase.co/storage/v1/object/public/documents/";
 
     // adapted from https://youtu.be/eyRdcNhDcI4
@@ -51,7 +52,7 @@ const rejected = () => {
                 .single()
 
             if (error) {
-                router.push('/')
+                router.push('/ethics-team/applications')
             }
 
             if (data) {
@@ -84,6 +85,7 @@ const rejected = () => {
                 setStudentSignature(data.student_signature)
                 setSupervisorSignature(data.supervisor_signature)
                 setReviewerComments(data.reviewer_comments)
+                setAssignedTo(data.assigned_to)
             }
         }
         fetchApplication()
@@ -117,7 +119,17 @@ const rejected = () => {
                         <Title order={4} align="center">ID: {id}</Title>
                         <Button onClick={() => router.back()}> <IconChevronLeft /> Back</Button>
                         <br></br>
+                        <br></br>
+                        <Select
+                            label="Assignee"
+                            placeholder="Select team member"
+                            searchable
+                            searchValue={assigned_to}
+                            nothingFound="No options"
+                            data={['Evaluator 1', 'Evaluator 2', 'Evaluator 3']}
+                        />
                         <Textarea
+                            placeholder="Comments to applicant"
                             label="Reviewer Comments"
                             radius="md"
                             autosize
@@ -299,9 +311,25 @@ const rejected = () => {
                         <br></br>
                         <br></br>
                         <Title order={3}>Declaration</Title>
+                        <Text fw="700">Student:</Text>
+                        <Text fz="sm">I confirm the following:</Text>
+                        <Text fz="sm">• The above is an accurate representation of my study activities;</Text>
+                        <Text fz="sm">• That I shall not commence participant recruitment and/or data collection without ethical approval to do so (where applicable);</Text>
+                        <Text fz="sm">• That I shall seek further ethical approval should I need to make any changes to my study after ethical approval has been granted (where applicable);</Text>
+                        <Text fz="sm">• That I shall conduct my study with integrity and in accordance with the ethical approval granted (where applicable);</Text>
+                        <Text fz="sm">• That, where necessary, I shall use existing or secondary data in accordance with terms and conditions of use or ethical approval, as applicable;</Text>
+                        <Text fz="sm">• That I understand that if I breach the terms of the approval granted I may not be able to use the data collected in my project report and may face disciplinary procedures; and</Text>
+                        <Text fz="sm">• That I shall respect my participants (where applicable) and the data I have collected and am using.</Text>
                         <br></br>
-                        <TextInput label="Student Signature" value={student_signature} placeholder="Print Name" withAsterisk radius="md" />
-                        <TextInput label="Supervisor Signature" value={supervisor_signature} placeholder="Print Name" withAsterisk radius="md" />
+                        <TextInput label="Student Signature" placeholder="Print Name" withAsterisk radius="md" value={student_signature} />
+                        <br></br>
+                        <Text fw="700">Supervisor:</Text>
+                        <Text fz="sm">I confirm the following:</Text>
+                        <Text fz="sm">• That I have reviewed the content of this form and all associated paperwork and am happy with its standard and accuracy;</Text>
+                        <Text fz="sm">• That I shall monitor the student’s conduct of the study in accordance with the ethical approval granted (where applicable); and</Text>
+                        <Text fz="sm">• That I shall report to the person(s) granting ethical approval any breaches of approval and ensure that no data is included in the student’s work that has been collected in breach of approval.</Text>
+                        <br></br>
+                        <TextInput label="Supervisor Signature" placeholder="Print Name" withAsterisk radius="md" value={supervisor_signature} />
                         <br></br>
                         <Button onClick={() => router.back()}> <IconChevronLeft /> Back</Button>
                     </Paper>
@@ -311,4 +339,4 @@ const rejected = () => {
     )
 }
 
-export default rejected
+export default ethicsView

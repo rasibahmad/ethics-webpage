@@ -16,14 +16,26 @@ const EthicsTeamApplicationTable = ({ application }) => {
 
   return (
     <tr>
-      <td className='clickable' onClick={() => router.push(`/ethics-team-review/${id}`)}>{student_name}</td>
-      <td className='clickable' onClick={() => router.push(`/ethics-team-review/${id}`)}>{applicationTitle}</td>
+      {status === 'Submitted' ? (
+        <td className='clickable' onClick={() => router.push(`/ethics-team-review/${id}`)}>{student_name}</td>
+      ) : (
+        <td className='clickable' onClick={() => router.push(`/ethics-team-view/${id}`)}>{student_name}</td>
+      )}
+      {status === 'Submitted' ? (
+        <td className='clickable' onClick={() => router.push(`/ethics-team-review/${id}`)}>{applicationTitle}</td>
+      ) : (
+        <td className='clickable' onClick={() => router.push(`/ethics-team-view/${id}`)}>{applicationTitle}</td>
+      )}
       <td>{id}</td>
       <td>{formattedCreatedDate}</td>
       <td>{formattedUpdatedDate}</td>
       <td>{assigned_to}</td>
       <td>{status}</td>
-      <td><Button onClick={() => router.push(`/ethics-team-review/${id}`)}>Review</Button></td>
+      {status === 'Submitted' ? (
+        <td><Button onClick={() => router.push(`/ethics-team-review/${id}`)}>Review</Button></td>
+      ) : (
+        <td><Button onClick={() => router.push(`/ethics-team-view/${id}`)}>View</Button></td>
+      )}
     </tr>
   )
 }
