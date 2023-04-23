@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { supabase } from '../../client'
 
-const studyApproved = () => {
+const StudyApproved = () => {
     const router = useRouter()
     const { id } = router.query
     const [applicationTitle, setApplicationTitle] = useState('')
@@ -328,4 +328,4 @@ const studyApproved = () => {
     )
 }
 
-export default studyApproved
+export default StudyApproved
