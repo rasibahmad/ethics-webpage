@@ -17,4 +17,16 @@ describe('check components', () => {
     //     userEvent.click(screen.getByRole('button', { name: /Home/i }))
     //     await screen.findAllByText('General Overview of Acceptable Projects')
     // })
+
+    it('checks route switches to FAQ page', async () => {
+        render(<Navbar />)
+        userEvent.click(screen.getByRole('button', { name: /FAQs/i }))
+        await screen.findAllByText('Frequently Asked Questions')
+    })
+
+    it('checks route switches to FAQ page', async () => {
+        render(<Navbar />)
+        userEvent.click(screen.getByRole('button', { name: /Applications/i }))
+        await screen.findAllByText('Create Ethics Application')
+    })
 })
