@@ -31,3 +31,11 @@ Password ~ Johnsmith1
 Ethics Team:
 Email ~ dave.brown@aston.ac.uk
 Password ~ Dave123
+
+If error:
+'error - failed to load SWC binary see more info here: https://nextjs.org/docs/messages/failed-loading-swc.'
+
+1-  Delete: 'node_modules' and 'package-lock.json' 
+2-  Run 'npm install'
+Guide:
+https://stackoverflow.com/questions/69816589/next-failed-to-load-swc-binary
